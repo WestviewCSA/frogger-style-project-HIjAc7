@@ -34,6 +34,14 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 //	Music soundBang = new Music("bang.wav", false);
 //	Music soundHaha = new Music("haha.wav", false);
 	
+	EndGoal end = new EndGoal();
+	Background[] space = new Background[5];
+	Asteroid[] row1 = new Asteroid[3];
+	Asteroid[] row2 = new Asteroid[4];
+	Asteroid[] row3 = new Asteroid[5];
+	DockingBay[] docks = new DockingBay[4];
+	Ship ship = new Ship();
+	
 	//frame width/height
 	int width = 600;
 	int height = 600;	
@@ -41,7 +49,24 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 
 	public void paint(Graphics g) {
 		super.paintComponent(g);
-
+		
+		for(Background obj : space) {
+			obj.paint(g);
+		}
+		end.paint(g);
+		for(DockingBay obj : docks) {
+			obj.paint(g);
+		}
+		for(Asteroid obj : row1) {
+			obj.paint(g);
+		}
+		for(Asteroid obj : row2) {
+			obj.paint(g);
+		}
+		for(Asteroid obj : row3) {
+			obj.paint(g);
+		}
+		ship.paint(g);
 	}
 	
 	public static void main(String[] arg) {
@@ -58,9 +83,23 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
  		f.addMouseListener(this);
 		f.addKeyListener(this);
 	
-		backgroundMusic.play();
+		//backgroundMusic.play();
 
-	
+		for(int i = 0;i<row1.length;i++) {
+			row1[i] = new Asteroid(i*150,400,1);
+		}
+		for(int i = 0;i<row2.length;i++) {
+			row2[i] = new Asteroid(i*120+15,325,2);
+		}
+		for(int i = 0;i<row3.length;i++) {
+			row3[i] = new Asteroid(i*135,230,1);
+		}
+		for(int i = 0;i<space.length;i++) {
+			space[i] = new Background(0,i*150);
+		}
+		for(int i = 0;i<docks.length;i++) {
+			docks[i] = new DockingBay(i*150+20,62);
+		}
 		
 		//the cursor image must be outside of the src folder
 		//you will need to import a couple of classes to make it fully 
@@ -118,7 +157,25 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		System.out.println(arg0.getKeyCode());
-		
+		if(arg0.getKeyCode() == 38) {
+			ship.setVy(-4);
+			ship.setVx(0);
+		}
+		if(arg0.getKeyCode() == 40) {
+			ship.setVy(4);
+			ship.setVx(0);
+		}
+		if(arg0.getKeyCode() == 39) {
+			ship.setVx(4);
+			ship.setVy(0);
+		}
+		if(arg0.getKeyCode() == 37) {
+			ship.setVx(-4);
+			ship.setVy(0);
+		}
+		if(arg0.getKeyCode() == 82) {
+			ship.reset();
+		}
 		
 		
 	}
