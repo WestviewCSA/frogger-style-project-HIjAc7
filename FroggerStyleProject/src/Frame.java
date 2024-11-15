@@ -41,6 +41,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	Asteroid[] row3 = new Asteroid[5];
 	DockingBay[] docks = new DockingBay[4];
 	Ship ship = new Ship();
+	boolean[] occupied = new boolean[4];
 	
 	//frame width/height
 	int width = 600;
@@ -67,7 +68,19 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			obj.paint(g);
 		}
 		ship.paint(g);
+		if(ship.getY()<=end.getY()+150) {
+			for(int i = 0;i<occupied.length;i++) {
+				if(!occupied[i]) {
+					docks[i].setDir(1);
+					occupied[i] = true;
+					ship.reset();
+					break;
+				}
+			}
+		}
 	}
+	
+	
 	
 	public static void main(String[] arg) {
 		Frame f = new Frame();
@@ -100,6 +113,10 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(int i = 0;i<docks.length;i++) {
 			docks[i] = new DockingBay(i*150+20,62);
 		}
+		for(int i = 0;i<occupied.length;i++) {
+			occupied[i] = false;
+		}
+		
 		
 		//the cursor image must be outside of the src folder
 		//you will need to import a couple of classes to make it fully 
