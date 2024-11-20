@@ -41,6 +41,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	Asteroid[] row3 = new Asteroid[5];
 	DockingBay[] docks = new DockingBay[4];
 	Ship ship = new Ship();
+	DockedShip[] ships = new DockedShip[4];
 	boolean[] occupied = new boolean[4];
 	
 	//frame width/height
@@ -67,12 +68,17 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(Asteroid obj : row3) {
 			obj.paint(g);
 		}
+		for(DockedShip obj : ships) {
+			obj.paint(g);
+		}
+		
 		ship.paint(g);
 		if(ship.getY()<=end.getY()+150) {
 			for(int i = 0;i<occupied.length;i++) {
 				if(!occupied[i]) {
 					docks[i].setDir(1);
 					occupied[i] = true;
+					ships[i].setDir(0);
 					ship.reset();
 					break;
 				}
@@ -112,6 +118,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		for(int i = 0;i<docks.length;i++) {
 			docks[i] = new DockingBay(i*150+20,62);
+		}
+		for(int i = 0;i<ships.length;i++) {
+			ships[i] = new DockedShip(i*150+45,92);
 		}
 		for(int i = 0;i<occupied.length;i++) {
 			occupied[i] = false;
@@ -192,6 +201,12 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		if(arg0.getKeyCode() == 82) {
 			ship.reset();
+		}
+		if(arg0.getKeyCode() == 61) {
+			ship.setDir(0);
+		}
+		if(arg0.getKeyCode() == 45) {
+			ship.setDir(1);
 		}
 		
 		

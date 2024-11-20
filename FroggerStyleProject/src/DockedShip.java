@@ -5,18 +5,18 @@ import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
 
-public class Ship{
+public class DockedShip{
 	private Image forward, backward, left, right; 	
 	private AffineTransform tx;
 	
 	private int dir = 1; 					//0-forward, 1-backward, 2-left, 3-right
 	int width, height;
 	private int x, y;						//position of the object
-	private int vx, vy;						//movement variables
+							//movement variables
 	double scaleWidth = 0.5;		//change to scale image
 	double scaleHeight = 0.5; 		//change to scale image
 
-	public Ship() {
+	public DockedShip() {
 		forward 	= getImage("/imgs/"+"shipgifnoback.gif"); //load the image for Tree
 		backward 	= getImage("/imgs/"+"Empty.png"); //load the image for Tree
 		//left 		= getImage("/imgs/"+"left.png"); //load the image for Tree
@@ -27,8 +27,7 @@ public class Ship{
 		height = 50;
 		x = 275;
 		y = 500;
-		vx = 0;
-		vy = 0;
+	
 		
 		tx = AffineTransform.getTranslateInstance(0, 0);
 		
@@ -36,13 +35,24 @@ public class Ship{
 									//use your variables
 		
 	}
-
+	public DockedShip(int x1, int y1) {
+		forward 	= getImage("/imgs/"+"shipgifnoback.gif"); //load the image for Tree
+		backward 	= getImage("/imgs/"+"Empty.png"); //load the image for Tree
+		
+		width = 50;
+		height = 50;
+		x = x1;
+		y = y1;
+		
+		
+		tx = AffineTransform.getTranslateInstance(0, 0);
+		
+		init(x, y);
+	}
 	public void paint(Graphics g) {
 		//these are the 2 lines of code needed draw an image on the screen
 		Graphics2D g2 = (Graphics2D) g;
-		
-		x+=vx;
-		y+=vy;	
+			
 		
 		init(x,y);
 		
@@ -64,12 +74,6 @@ public class Ship{
 		}
 
 	}
-	public void reset() {
-		x = 275;
-		y = 500;
-		vx = 0;
-		vy = 0;
-	}
 	
 	public int getX() {
 		return x;
@@ -87,21 +91,6 @@ public class Ship{
 		this.y = y;
 	}
 
-	public int getVx() {
-		return vx;
-	}
-
-	public void setVx(int vx) {
-		this.vx = vx;
-	}
-
-	public int getVy() {
-		return vy;
-	}
-
-	public void setVy(int vy) {
-		this.vy = vy;
-	}
 
 	private void init(double a, double b) {
 		tx.setToTranslation(a, b);
@@ -111,7 +100,7 @@ public class Ship{
 	private Image getImage(String path) {
 		Image tempImage = null;
 		try {
-			URL imageURL = Ship.class.getResource(path);
+			URL imageURL = DockedShip.class.getResource(path);
 			tempImage = Toolkit.getDefaultToolkit().getImage(imageURL);
 		} catch (Exception e) {
 			e.printStackTrace();
