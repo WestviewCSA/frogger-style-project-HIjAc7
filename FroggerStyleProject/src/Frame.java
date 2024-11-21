@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -27,18 +28,21 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	long ellapseTime = 0;
 	Font timeFont = new Font("Courier", Font.BOLD, 70);
 	int level = 0;
+	int score = 0;
+	int f = 0;
+	ArrayList<String> fonts = GFG.getfonts();
+	Font myFont = new Font(fonts.get(f), Font.BOLD, 40);
 	
-	
-	Font myFont = new Font("Courier", Font.BOLD, 40);
 	SimpleAudioPlayer backgroundMusic = new SimpleAudioPlayer("scifi.wav", false);
 //	Music soundBang = new Music("bang.wav", false);
 //	Music soundHaha = new Music("haha.wav", false);
 	
 	EndGoal end = new EndGoal();
-	Background[] space = new Background[5];
+	Background[] space = new Background[6];
 	Asteroid[] row1 = new Asteroid[3];
 	Asteroid[] row2 = new Asteroid[4];
 	Asteroid[] row3 = new Asteroid[5];
+	Asteroid asteroid = new Asteroid(-278,600,1);
 	DockingBay[] docks = new DockingBay[4];
 	Ship ship = new Ship();
 	DockedShip[] ships = new DockedShip[4];
@@ -46,7 +50,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	
 	//frame width/height
 	int width = 600;
-	int height = 600;	
+	int height = 800;	
 	
 
 	public void paint(Graphics g) {
@@ -65,6 +69,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(Asteroid obj : row2) {
 			obj.paint(g);
 		}
+		asteroid.paint(g);
 		for(Asteroid obj : row3) {
 			obj.paint(g);
 		}
@@ -72,13 +77,19 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			obj.paint(g);
 		}
 		
+		Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
+		g.setFont(myFont);
+		g.setColor(Color.white);
+		g.drawString("Score: "+score, 20, 50);
 		ship.paint(g);
+		
 		if(ship.getY()<=end.getY()+150) {
 			for(int i = 0;i<occupied.length;i++) {
 				if(!occupied[i]) {
 					docks[i].setDir(1);
 					occupied[i] = true;
 					ships[i].setDir(0);
+					score++;
 					ship.reset();
 					break;
 				}
@@ -105,13 +116,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		//backgroundMusic.play();
 
 		for(int i = 0;i<row1.length;i++) {
-			row1[i] = new Asteroid(i*150,400,1);
+			row1[i] = new Asteroid(i*150,600,1);
 		}
 		for(int i = 0;i<row2.length;i++) {
-			row2[i] = new Asteroid(i*120+15,325,2);
+			row2[i] = new Asteroid(i*120+15,525,2);
 		}
 		for(int i = 0;i<row3.length;i++) {
-			row3[i] = new Asteroid(i*135,230,1);
+			row3[i] = new Asteroid(i*135-100,440,1);
 		}
 		for(int i = 0;i<space.length;i++) {
 			space[i] = new Background(0,i*150);
@@ -120,12 +131,12 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			docks[i] = new DockingBay(i*150+20,62);
 		}
 		for(int i = 0;i<ships.length;i++) {
-			ships[i] = new DockedShip(i*150+45,92);
+			ships[i] = new DockedShip(i*150+42,92);
 		}
 		for(int i = 0;i<occupied.length;i++) {
 			occupied[i] = false;
 		}
-		
+		ship.setDir(0);
 		
 		//the cursor image must be outside of the src folder
 		//you will need to import a couple of classes to make it fully 

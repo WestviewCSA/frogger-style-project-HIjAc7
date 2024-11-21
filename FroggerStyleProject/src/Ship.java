@@ -26,7 +26,7 @@ public class Ship{
 		width = 50;
 		height = 50;
 		x = 275;
-		y = 500;
+		y = 700;
 		vx = 0;
 		vy = 0;
 		
@@ -66,7 +66,7 @@ public class Ship{
 	}
 	public void reset() {
 		x = 275;
-		y = 500;
+		y = 700;
 		vx = 0;
 		vy = 0;
 	}
