@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
@@ -36,6 +37,59 @@ public class Platform{
 		init(x, y); 				//initialize the location of the image
 									//use your variables
 		
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public int getVx() {
+		return vx;
+	}
+
+	public void setVx(int vx) {
+		this.vx = vx;
+	}
+
+	public int getVy() {
+		return vy;
+	}
+
+	public void setVy(int vy) {
+		this.vy = vy;
+	}
+	public boolean collided(Ship ship) {
+		Rectangle main = new Rectangle(ship.getX(),ship.getY(),ship.getHeight(),ship.getWidth());
+		Rectangle thisObject = new Rectangle(x,y,height,width);
+		return main.intersects(thisObject);
 	}
 	public Platform(int a, int b, int m) {
 		this();
