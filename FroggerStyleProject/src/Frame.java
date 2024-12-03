@@ -47,6 +47,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	Ship ship = new Ship();
 	DockedShip[] ships = new DockedShip[4];
 	boolean[] occupied = new boolean[4];
+	Platform[] platform1 = new Platform[2];
+	Platform[] platform2 = new Platform[2];
+	Platform[] platform7 = new Platform[2];
+	Platform[] platform3 = new Platform[3];
+	Platform[] platform4 = new Platform[3];
+	Platform[] platform5 = new Platform[3];
+	Platform[] platform6 = new Platform[3];
 	
 	//frame width/height
 	int width = 600;
@@ -74,6 +81,27 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			obj.paint(g);
 		}
 		for(DockedShip obj : ships) {
+			obj.paint(g);
+		}
+		for(Platform obj : platform1) {
+			obj.paint(g);
+		}
+		for(Platform obj : platform2) {
+			obj.paint(g);
+		}
+		for(Platform obj : platform3) {
+			obj.paint(g);
+		}
+		for(Platform obj : platform4) {
+			obj.paint(g);
+		}
+		for(Platform obj : platform5) {
+			obj.paint(g);
+		}
+		for(Platform obj : platform6) {
+			obj.paint(g);
+		}
+		for(Platform obj : platform7) {
 			obj.paint(g);
 		}
 		
@@ -132,6 +160,27 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		for(int i = 0;i<ships.length;i++) {
 			ships[i] = new DockedShip(i*150+42,92);
+		}
+		for(int i = 0;i<platform1.length;i++) {
+			platform1[i] = new Platform(i*50,172,1);
+		}
+		for(int i = 0;i<platform2.length;i++) {
+			platform2[i] = new Platform(i*50+300,172,1);
+		}
+		for(int i = 0;i<platform3.length;i++) {
+			platform3[i] = new Platform(i*50+500,242,2);
+		}
+		for(int i = 0;i<platform4.length;i++) {
+			platform4[i] = new Platform(i*50+73,242,2);
+		}
+		for(int i = 0;i<platform5.length;i++) {
+			platform5[i] = new Platform(i*50+100,312,1);
+		}
+		for(int i = 0;i<platform6.length;i++) {
+			platform6[i] = new Platform(i*50+400,312,1);
+		}
+		for(int i = 0;i<platform7.length;i++) {
+			platform7[i] = new Platform(i*50+500,172,1);
 		}
 		for(int i = 0;i<occupied.length;i++) {
 			occupied[i] = false;
