@@ -43,9 +43,14 @@ public class Ship{
 		
 		x+=vx;
 		y+=vy;	
-		
+		if(x>650) {
+			x = -150;
+		}
+		if(x<-150) {
+			x = 650;
+		}
 		init(x,y);
-		
+		g2.drawRect(x+1, y, width-5, height-5);
 		switch(dir) {
 		case 0:
 			g2.drawImage(forward, tx, null);
@@ -61,6 +66,7 @@ public class Ship{
 	//	case 3:
 	//		g2.drawImage(right, tx, null);
 		//	break;
+		
 		}
 
 	}

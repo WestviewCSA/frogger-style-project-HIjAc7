@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
@@ -64,9 +65,13 @@ public class Asteroid{
 		
 		init(x,y);
 		g2.drawImage(forward, tx, null);
-
+		g2.drawRect(x+25, y+25, width/2, height/2);
 	}
-	
+	public boolean collided(Ship ship) {
+		Rectangle main = new Rectangle(ship.getX()+1,ship.getY(),ship.getHeight()-5,ship.getWidth()-5);
+		Rectangle thisObject = new Rectangle(x+25, y+25, width/2, height/2);
+		return main.intersects(thisObject);
+	}
 	private void init(double a, double b) {
 		tx.setToTranslation(a, b);
 		tx.scale(scaleWidth, scaleHeight);

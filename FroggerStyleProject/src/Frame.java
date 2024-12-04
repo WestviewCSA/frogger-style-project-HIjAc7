@@ -62,7 +62,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 
 	public void paint(Graphics g) {
 		super.paintComponent(g);
-		
+		g.setColor(Color.green);
 		for(Background obj : space) {
 			obj.paint(g);
 		}
@@ -72,37 +72,67 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		for(Asteroid obj : row1) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.reset();
+			}
 		}
 		for(Asteroid obj : row2) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.reset();
+			}
 		}
 		asteroid.paint(g);
 		for(Asteroid obj : row3) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.reset();
+			}
 		}
 		for(DockedShip obj : ships) {
 			obj.paint(g);
 		}
 		for(Platform obj : platform1) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.setVx(obj.getVx());
+			}
 		}
 		for(Platform obj : platform2) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.setVx(obj.getVx());
+			}
 		}
 		for(Platform obj : platform3) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.setVx(obj.getVx()*-1);
+			}
 		}
 		for(Platform obj : platform4) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.setVx(obj.getVx()*-1);
+			}
 		}
 		for(Platform obj : platform5) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.setVx(obj.getVx());
+			}
 		}
 		for(Platform obj : platform6) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.setVx(obj.getVx());
+			}
 		}
 		for(Platform obj : platform7) {
 			obj.paint(g);
+			if(obj.collided(ship)) {
+				ship.setVx(obj.getVx());
+			}
 		}
 		
 		Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
@@ -111,7 +141,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		g.drawString("Score: "+score, 20, 50);
 		ship.paint(g);
 		
-		if(ship.getY()<=end.getY()+150) {
+		if(end.collided(ship)) {
 			for(int i = 0;i<occupied.length;i++) {
 				if(!occupied[i]) {
 					docks[i].setDir(1);

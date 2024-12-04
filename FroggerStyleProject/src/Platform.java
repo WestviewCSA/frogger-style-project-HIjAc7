@@ -87,8 +87,8 @@ public class Platform{
 		this.vy = vy;
 	}
 	public boolean collided(Ship ship) {
-		Rectangle main = new Rectangle(ship.getX(),ship.getY(),ship.getHeight(),ship.getWidth());
-		Rectangle thisObject = new Rectangle(x,y,height,width);
+		Rectangle main = new Rectangle(ship.getX()+1,ship.getY(),ship.getHeight()-5,ship.getWidth()-5);
+		Rectangle thisObject = new Rectangle(x,y,width,height);
 		return main.intersects(thisObject);
 	}
 	public Platform(int a, int b, int m) {
@@ -118,7 +118,7 @@ public class Platform{
 		
 		init(x,y);
 		g2.drawImage(forward, tx, null);
-
+		g2.drawRect(x, y, width, height);
 	}
 	
 	private void init(double a, double b) {
