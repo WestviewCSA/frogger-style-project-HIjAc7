@@ -95,42 +95,56 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(Platform obj : platform1) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
+				ship.setY(obj.getY());
+				ship.setVy(0);
 				ship.setVx(obj.getVx());
 			}
 		}
 		for(Platform obj : platform2) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
+				ship.setY(obj.getY());
+				ship.setVy(0);
 				ship.setVx(obj.getVx());
 			}
 		}
 		for(Platform obj : platform3) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
+				ship.setY(obj.getY());
+				ship.setVy(0);
 				ship.setVx(obj.getVx()*-1);
 			}
 		}
 		for(Platform obj : platform4) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
+				ship.setY(obj.getY());
+				ship.setVy(0);
 				ship.setVx(obj.getVx()*-1);
 			}
 		}
 		for(Platform obj : platform5) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
+				ship.setY(obj.getY());
+				ship.setVy(0);
 				ship.setVx(obj.getVx());
 			}
 		}
 		for(Platform obj : platform6) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
+				ship.setY(obj.getY());
+				ship.setVy(0);
 				ship.setVx(obj.getVx());
 			}
 		}
 		for(Platform obj : platform7) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
+				ship.setY(obj.getY());
+				ship.setVy(0);
 				ship.setVx(obj.getVx());
 			}
 		}
@@ -298,7 +312,22 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(arg0.getKeyCode() == 45) {
 			ship.setDir(1);
 		}
-		
+		if(arg0.getKeyCode() == 36) {
+			ship.setVy(-4);
+			ship.setVx(-4);
+		}
+		if(arg0.getKeyCode() == 33) {
+			ship.setVy(-4);
+			ship.setVx(4);
+		}
+		if(arg0.getKeyCode() == 35) {
+			ship.setVy(4);
+			ship.setVx(-4);
+		}
+		if(arg0.getKeyCode() == 34) {
+			ship.setVy(4);
+			ship.setVx(4);
+		}
 		
 	}
 
