@@ -17,9 +17,11 @@ public class Asteroid{
 	double scaleWidth = 1.0;		//change to scale image
 	double scaleHeight = 1.0; 		//change to scale image
 	int mode = 1;
+	int phase = 0;
 
 	public Asteroid() {
-		forward 	= getImage("/imgs/"+"asteroid-pixilart.png"); //load the image for Tree
+		forward 	= getImage("/imgs/"+"asteroid-pixilart.png");
+		 //load the image for Tree
 		
 
 		//alter these
@@ -44,6 +46,13 @@ public class Asteroid{
 		this.y = b;
 		mode = m;
 	}
+	public Asteroid(int a, int b, int m, int f) {
+		this();
+		this.x = a;
+		this.y = b;
+		mode = m;
+		forward 	= getImage("/imgs/"+"trasparent-asteroid.png");
+	}
 
 	public void paint(Graphics g) {
 		//these are the 2 lines of code needed draw an image on the screen
@@ -62,7 +71,6 @@ public class Asteroid{
 				x = 650;
 			}
 		}
-		
 		init(x,y);
 		g2.drawImage(forward, tx, null);
 		g2.drawRect(x+25, y+25, width/2, height/2);

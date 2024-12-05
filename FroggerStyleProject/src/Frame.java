@@ -32,6 +32,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	int f = 0;
 	ArrayList<String> fonts = GFG.getfonts();
 	Font myFont = new Font(fonts.get(f), Font.BOLD, 40);
+	boolean collided = false;
 	
 	SimpleAudioPlayer backgroundMusic = new SimpleAudioPlayer("scifi.wav", false);
 //	Music soundBang = new Music("bang.wav", false);
@@ -42,7 +43,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	Asteroid[] row1 = new Asteroid[3];
 	Asteroid[] row2 = new Asteroid[4];
 	Asteroid[] row3 = new Asteroid[5];
-	Asteroid asteroid = new Asteroid(-278,600,1);
+	Asteroid asteroid = new Asteroid(-278,600,1,1);
 	DockingBay[] docks = new DockingBay[4];
 	Ship ship = new Ship();
 	DockedShip[] ships = new DockedShip[4];
@@ -74,12 +75,14 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			obj.paint(g);
 			if(obj.collided(ship)) {
 				ship.reset();
+				collided = true;
 			}
 		}
 		for(Asteroid obj : row2) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
 				ship.reset();
+				collided = true;
 			}
 		}
 		asteroid.paint(g);
@@ -87,6 +90,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			obj.paint(g);
 			if(obj.collided(ship)) {
 				ship.reset();
+				collided = true;
 			}
 		}
 		for(DockedShip obj : ships) {
@@ -98,6 +102,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				ship.setY(obj.getY());
 				ship.setVy(0);
 				ship.setVx(obj.getVx());
+				collided = true;
 			}
 		}
 		for(Platform obj : platform2) {
@@ -106,6 +111,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				ship.setY(obj.getY());
 				ship.setVy(0);
 				ship.setVx(obj.getVx());
+				collided = true;
 			}
 		}
 		for(Platform obj : platform3) {
@@ -114,6 +120,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				ship.setY(obj.getY());
 				ship.setVy(0);
 				ship.setVx(obj.getVx()*-1);
+				collided = true;
 			}
 		}
 		for(Platform obj : platform4) {
@@ -122,6 +129,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				ship.setY(obj.getY());
 				ship.setVy(0);
 				ship.setVx(obj.getVx()*-1);
+				collided = true;
 			}
 		}
 		for(Platform obj : platform5) {
@@ -130,6 +138,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				ship.setY(obj.getY());
 				ship.setVy(0);
 				ship.setVx(obj.getVx());
+				collided = true;
 			}
 		}
 		for(Platform obj : platform6) {
@@ -138,6 +147,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				ship.setY(obj.getY());
 				ship.setVy(0);
 				ship.setVx(obj.getVx());
+				collided = true;
 			}
 		}
 		for(Platform obj : platform7) {
@@ -146,6 +156,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				ship.setY(obj.getY());
 				ship.setVy(0);
 				ship.setVx(obj.getVx());
+				collided = true;
 			}
 		}
 		
@@ -290,6 +301,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(arg0.getKeyCode() == 38) {
 			ship.setVy(-4);
 			ship.setVx(0);
+			
 		}
 		if(arg0.getKeyCode() == 40) {
 			ship.setVy(4);
