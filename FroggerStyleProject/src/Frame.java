@@ -55,7 +55,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	Platform[] platform4 = new Platform[3];
 	Platform[] platform5 = new Platform[3];
 	Platform[] platform6 = new Platform[3];
-	
+	ArrayList<Platform[]> platforms = new ArrayList<Platform[]>();
+	Laser[] lasers = new Laser[3];
+	ArrayList<Hearts> hearts = new ArrayList<Hearts>();
+	Hearts[] lostHearts = new Hearts[6];
+	EndScreen endScreen = new EndScreen(0,0);
 	//frame width/height
 	int width = 600;
 	int height = 800;	
@@ -64,6 +68,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(Color.green);
+		
 		for(Background obj : space) {
 			obj.paint(g);
 		}
@@ -71,18 +76,28 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(DockingBay obj : docks) {
 			obj.paint(g);
 		}
+		
+		for(Hearts obj : lostHearts) {
+			obj.setDir(1);
+			obj.paint(g);
+		}
+		for(Hearts obj : hearts) {
+			obj.setDir(0);
+			obj.paint(g);
+		}
+		
 		for(Asteroid obj : row1) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
 				ship.reset();
-				collided = true;
+				hearts.remove(hearts.size()-1);
 			}
 		}
 		for(Asteroid obj : row2) {
 			obj.paint(g);
 			if(obj.collided(ship)) {
 				ship.reset();
-				collided = true;
+				hearts.remove(hearts.size()-1);
 			}
 		}
 		asteroid.paint(g);
@@ -90,80 +105,40 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			obj.paint(g);
 			if(obj.collided(ship)) {
 				ship.reset();
-				collided = true;
+				hearts.remove(hearts.size()-1);
 			}
 		}
 		for(DockedShip obj : ships) {
 			obj.paint(g);
 		}
-		for(Platform obj : platform1) {
+		for(Laser obj : lasers) {
 			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.setY(obj.getY());
-				ship.setVy(0);
-				ship.setVx(obj.getVx());
-				collided = true;
+		}
+		for(Platform[] list : platforms) {
+			for(Platform obj : list) {
+				obj.paint(g);
+				if(obj.collided(ship)) {
+					ship.setY(obj.getY());
+					ship.setVy(0);
+					ship.setVx(obj.getVx());
+					collided = true;
+				}
 			}
 		}
-		for(Platform obj : platform2) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.setY(obj.getY());
-				ship.setVy(0);
-				ship.setVx(obj.getVx());
-				collided = true;
+		
+		for(Laser obj : lasers) {
+			if(!collided && obj.collided(ship)) {
+				ship.reset();
+				hearts.remove(hearts.size()-1);
 			}
-		}
-		for(Platform obj : platform3) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.setY(obj.getY());
-				ship.setVy(0);
-				ship.setVx(obj.getVx()*-1);
-				collided = true;
-			}
-		}
-		for(Platform obj : platform4) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.setY(obj.getY());
-				ship.setVy(0);
-				ship.setVx(obj.getVx()*-1);
-				collided = true;
-			}
-		}
-		for(Platform obj : platform5) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.setY(obj.getY());
-				ship.setVy(0);
-				ship.setVx(obj.getVx());
-				collided = true;
-			}
-		}
-		for(Platform obj : platform6) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.setY(obj.getY());
-				ship.setVy(0);
-				ship.setVx(obj.getVx());
-				collided = true;
-			}
-		}
-		for(Platform obj : platform7) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.setY(obj.getY());
-				ship.setVy(0);
-				ship.setVx(obj.getVx());
-				collided = true;
-			}
+			
 		}
 		
 		Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
 		g.setFont(myFont);
 		g.setColor(Color.white);
 		g.drawString("Score: "+score, 20, 50);
+		
 		ship.paint(g);
 		
 		if(end.collided(ship)) {
@@ -177,6 +152,16 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 					break;
 				}
 			}
+		}
+		if(hearts.size() == 0) {
+			endScreen.setDir(0);
+			endScreen.paint(g);
+			g.drawString("Score: "+score, 100, 500);
+
+		}
+		if(score ==  4) {
+			endScreen.setDir(1);
+			endScreen.paint(g);
 		}
 	}
 	
@@ -201,6 +186,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(int i = 0;i<row1.length;i++) {
 			row1[i] = new Asteroid(i*150,600,1);
 		}
+		for(int i = 0; i<lostHearts.length;i++) {
+			lostHearts[i] = new Hearts(i*40+20,720);
+		}
+		for(int i = 0; i<6;i++) {
+			Hearts temp = new  Hearts(i*40+20,720);
+			hearts.add(i, temp);
+		}
 		for(int i = 0;i<row2.length;i++) {
 			row2[i] = new Asteroid(i*120+15,525,2);
 		}
@@ -216,11 +208,14 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(int i = 0;i<ships.length;i++) {
 			ships[i] = new DockedShip(i*150+42,92);
 		}
+		for(int i = 0;i<lasers.length;i++) {
+			lasers[i] = new Laser(0,i*50+170);
+		}
 		for(int i = 0;i<platform1.length;i++) {
-			platform1[i] = new Platform(i*50,172,1);
+			platform1[i] = new Platform(i*50,192,1);
 		}
 		for(int i = 0;i<platform2.length;i++) {
-			platform2[i] = new Platform(i*50+300,172,1);
+			platform2[i] = new Platform(i*50+300,192,1);
 		}
 		for(int i = 0;i<platform3.length;i++) {
 			platform3[i] = new Platform(i*50+500,242,2);
@@ -229,14 +224,21 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			platform4[i] = new Platform(i*50+73,242,2);
 		}
 		for(int i = 0;i<platform5.length;i++) {
-			platform5[i] = new Platform(i*50+100,312,1);
+			platform5[i] = new Platform(i*50+100,292,1);
 		}
 		for(int i = 0;i<platform6.length;i++) {
-			platform6[i] = new Platform(i*50+400,312,1);
+			platform6[i] = new Platform(i*50+400,292,1);
 		}
 		for(int i = 0;i<platform7.length;i++) {
-			platform7[i] = new Platform(i*50+500,172,1);
+			platform7[i] = new Platform(i*50+500,192,1);
 		}
+		platforms.add(platform1);
+		platforms.add(platform2);
+		platforms.add(platform3);
+		platforms.add(platform4);
+		platforms.add(platform5);
+		platforms.add(platform6);
+		platforms.add(platform7);
 		for(int i = 0;i<occupied.length;i++) {
 			occupied[i] = false;
 		}
@@ -301,11 +303,18 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(arg0.getKeyCode() == 38) {
 			ship.setVy(-4);
 			ship.setVx(0);
-			
+			if(collided) {
+				ship.setY(ship.getY()-50);
+				collided = false;
+			}
 		}
 		if(arg0.getKeyCode() == 40) {
 			ship.setVy(4);
 			ship.setVx(0);
+			if(collided) {
+				ship.setY(ship.getY()+50);
+				collided = false;
+			}
 		}
 		if(arg0.getKeyCode() == 39) {
 			ship.setVx(4);

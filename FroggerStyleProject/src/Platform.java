@@ -96,25 +96,27 @@ public class Platform{
 		this.x = a;
 		this.y = b;
 		mode = m;
+		if(mode != 1) {
+			vy*=-1;
+			vx*=-1;
+		}
 	}
 
 	public void paint(Graphics g) {
 		//these are the 2 lines of code needed draw an image on the screen
 		Graphics2D g2 = (Graphics2D) g;
 		
-		if(mode == 1) {
-			x+=vx;
-			y+=vy;	
-			if(x>650) {
-				x = -150;
-			}
-		}else {
-			x-=vx;
-			y-=vy;	
-			if(x<-150) {
-				x = 650;
-			}
+		
+		x+=vx;
+		y+=vy;	
+		if(x>650) {
+			x = -150;
 		}
+		
+		if(x<-150) {
+			x = 650;
+		}
+		
 		
 		init(x,y);
 		g2.drawImage(forward, tx, null);
