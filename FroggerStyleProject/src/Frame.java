@@ -13,8 +13,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,24 +36,23 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	ArrayList<String> fonts = GFG.getfonts();
 	Font myFont = new Font(fonts.get(f), Font.BOLD, 40);
 	boolean collided = false;
-	
-	SimpleAudioPlayer backgroundMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
-	SimpleAudioPlayer asteroidHit = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
-	SimpleAudioPlayer laserHit = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
+	//Initializing objects for sound effects
+	SimpleAudioPlayer backgroundMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
+	SimpleAudioPlayer asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+	SimpleAudioPlayer laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
 	SimpleAudioPlayer laserSound = new SimpleAudioPlayer("edm-zap-246568 (2) (1).wav",true);
-	SimpleAudioPlayer dockMoving = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
-	SimpleAudioPlayer gameOver = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
-	SimpleAudioPlayer losingMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
-	SimpleAudioPlayer winSound = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
-	SimpleAudioPlayer winningMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
-	SimpleAudioPlayer heartLost = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
-	SimpleAudioPlayer sound = new SimpleAudioPlayer("scifi.wav",false);
+	SimpleAudioPlayer gameOver = new SimpleAudioPlayer("loss sound.wav", false);
+
+	SimpleAudioPlayer winSound = new SimpleAudioPlayer("win sound.wav", false);
+	
+	SimpleAudioPlayer heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+	//SimpleAudioPlayer sound = new SimpleAudioPlayer("scifi.wav",false);
 	
 	
 	//	Music soundBang = new Music("bang.wav", false);
 //	Music soundHaha = new Music("haha.wav", false);
 	
-	EndGoal end = new EndGoal();
+	EndGoal end = new EndGoal(); //initializing assets
 	Background[] space = new Background[6];
 	Asteroid[] row1 = new Asteroid[3];
 	Asteroid[] row2 = new Asteroid[4];
@@ -80,7 +82,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	public void paint(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(Color.green);
-		
+		//painting all assets and tracking collision
 		for(Background obj : space) {
 			obj.paint(g);
 		}
@@ -103,6 +105,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			if(obj.collided(ship)) {
 				ship.reset();
 				hearts.remove(hearts.size()-1);
+				asteroidHit.play();
+				heartLost.play();
 			}
 		}
 		for(Asteroid obj : row2) {
@@ -110,6 +114,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			if(obj.collided(ship)) {
 				ship.reset();
 				hearts.remove(hearts.size()-1);
+				asteroidHit.play();
+				heartLost.play();
 			}
 		}
 		asteroid.paint(g);
@@ -118,7 +124,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			if(obj.collided(ship)) {
 				ship.reset();
 				hearts.remove(hearts.size()-1);
+				asteroidHit.play();
+				heartLost.play();
+				
 			}
+			
 		}
 		for(DockedShip obj : ships) {
 			obj.paint(g);
@@ -140,12 +150,14 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		
 		for(Laser obj : lasers) {
 			if(!collided && obj.collided(ship)) {
+				laserHit.play();
 				ship.reset();
 				hearts.remove(hearts.size()-1);
+				heartLost.play();
 			}
 			
 		}
-		
+		//displaying score
 		Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
 		g.setFont(myFont);
 		g.setColor(Color.white);
@@ -166,13 +178,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				}
 			}
 		}
+		//ends game based on score or lives
 		if(hearts.size() == 0) {
+			backgroundMusic.pause();
+			laserSound.pause();
+			gameOver.play();
 			endScreen.setDir(0);
 			endScreen.paint(g);
 			g.drawString("Score: "+score, 100, 500);
 
 		}
 		if(score ==  4) {
+			backgroundMusic.pause();
+			laserSound.pause();
+			winSound.play();
 			endScreen.setDir(1);
 			endScreen.paint(g);
 		}
@@ -193,9 +212,10 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		f.setResizable(false);
  		f.addMouseListener(this);
 		f.addKeyListener(this);
-	
-		//backgroundMusic.play();
-
+		//playing sound effect
+		backgroundMusic.play();
+		laserSound.play();
+		//Initializing assets and placing them
 		for(int i = 0;i<row1.length;i++) {
 			row1[i] = new Asteroid(i*150,600,1);
 		}
@@ -245,6 +265,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(int i = 0;i<platform7.length;i++) {
 			platform7[i] = new Platform(i*50+500,192,1);
 		}
+		//filling ArrayList for easy access to objects
 		platforms.add(platform1);
 		platforms.add(platform2);
 		platforms.add(platform3);
@@ -312,6 +333,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+		//arrow keys for movement, r to reset
+		//+ and - to toggle visibility of the ship - hard mode?
+		//more keys for diagonal movement
 		System.out.println(arg0.getKeyCode());
 		if(arg0.getKeyCode() == 38) {
 			;
@@ -355,6 +379,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			for(int i =0;i<docks.length;i++) {
 				docks[i].setDir(0);
 			}
+			laserSound.play();
+			backgroundMusic.play();
 		}
 		if(arg0.getKeyCode() == 61) {
 			ship.setDir(0);
