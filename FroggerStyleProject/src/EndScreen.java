@@ -8,7 +8,7 @@ import java.net.URL;
 public class EndScreen{
 	private Image start; 
 	private Image end; 
-	private Image transition; 
+	private Image playing; 
 	private AffineTransform tx;
 	private boolean hasPlayed = false;
 	private boolean play = false;
@@ -27,6 +27,7 @@ public class EndScreen{
 	public EndScreen() {
 		start= getImage("/imgs/"+"game-over.png"); //load the image for Tree
 		end = getImage("/imgs/"+"win-screen.png");
+		playing = getImage("/imgs/" + "Empty.png");
 		
 		//alter these
 		width = 600;
@@ -68,12 +69,17 @@ public class EndScreen{
 			g2.drawImage(end, tx, null);
 
 			break;
+		case 2:
+			g2.drawImage(playing,tx,null);
+			break;
 		}
+	
+			
 		
 		
 
 	}
-	
+
 	public int getDir() {
 		return dir;
 	}

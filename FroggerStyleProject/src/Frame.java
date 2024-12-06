@@ -34,8 +34,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	Font myFont = new Font(fonts.get(f), Font.BOLD, 40);
 	boolean collided = false;
 	
-	SimpleAudioPlayer backgroundMusic = new SimpleAudioPlayer("scifi.wav", false);
-//	Music soundBang = new Music("bang.wav", false);
+	SimpleAudioPlayer backgroundMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
+	SimpleAudioPlayer asteroidHit = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
+	SimpleAudioPlayer laserHit = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
+	SimpleAudioPlayer laserSound = new SimpleAudioPlayer("edm-zap-246568 (2) (1).wav",true);
+	SimpleAudioPlayer dockMoving = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
+	SimpleAudioPlayer gameOver = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
+	SimpleAudioPlayer losingMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
+	SimpleAudioPlayer winSound = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
+	SimpleAudioPlayer winningMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
+	SimpleAudioPlayer heartLost = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", false);
+	SimpleAudioPlayer sound = new SimpleAudioPlayer("scifi.wav",false);
+	
+	
+	//	Music soundBang = new Music("bang.wav", false);
 //	Music soundHaha = new Music("haha.wav", false);
 	
 	EndGoal end = new EndGoal();
@@ -144,6 +156,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(end.collided(ship)) {
 			for(int i = 0;i<occupied.length;i++) {
 				if(!occupied[i]) {
+					
 					docks[i].setDir(1);
 					occupied[i] = true;
 					ships[i].setDir(0);
@@ -301,6 +314,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		// TODO Auto-generated method stub
 		System.out.println(arg0.getKeyCode());
 		if(arg0.getKeyCode() == 38) {
+			;
 			ship.setVy(-4);
 			ship.setVx(0);
 			if(collided) {
@@ -326,6 +340,21 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		if(arg0.getKeyCode() == 82) {
 			ship.reset();
+			score = 0;
+			endScreen.setDir(2);
+			for(int i = hearts.size()-1;i>=0;i--) {
+				hearts.remove(i);
+			}
+			for(int i = 0; i<6;i++) {
+				Hearts temp = new  Hearts(i*40+20,720);
+				hearts.add(i, temp);
+			}
+			for(int i = 0;i<occupied.length;i++) {
+				ships[i].setDir(1);
+			}
+			for(int i =0;i<docks.length;i++) {
+				docks[i].setDir(0);
+			}
 		}
 		if(arg0.getKeyCode() == 61) {
 			ship.setDir(0);
