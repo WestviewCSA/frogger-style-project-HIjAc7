@@ -42,11 +42,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	SimpleAudioPlayer laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
 	SimpleAudioPlayer laserSound = new SimpleAudioPlayer("edm-zap-246568 (2) (1).wav",true);
 	SimpleAudioPlayer gameOver = new SimpleAudioPlayer("loss sound.wav", false);
-
 	SimpleAudioPlayer winSound = new SimpleAudioPlayer("win sound.wav", false);
-	
 	SimpleAudioPlayer heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-	//SimpleAudioPlayer sound = new SimpleAudioPlayer("scifi.wav",false);
+	SimpleAudioPlayer pointSound = new SimpleAudioPlayer("point sound.wav",false);
 	
 	
 	//	Music soundBang = new Music("bang.wav", false);
@@ -105,7 +103,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			if(obj.collided(ship)) {
 				ship.reset();
 				hearts.remove(hearts.size()-1);
+				asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
 				asteroidHit.play();
+				heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 				heartLost.play();
 			}
 		}
@@ -114,7 +114,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			if(obj.collided(ship)) {
 				ship.reset();
 				hearts.remove(hearts.size()-1);
+				asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
 				asteroidHit.play();
+				heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 				heartLost.play();
 			}
 		}
@@ -124,7 +126,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			if(obj.collided(ship)) {
 				ship.reset();
 				hearts.remove(hearts.size()-1);
+				asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
 				asteroidHit.play();
+				heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 				heartLost.play();
 				
 			}
@@ -150,9 +154,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		
 		for(Laser obj : lasers) {
 			if(!collided && obj.collided(ship)) {
+				laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
 				laserHit.play();
 				ship.reset();
 				hearts.remove(hearts.size()-1);
+				heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 				heartLost.play();
 			}
 			
@@ -168,7 +174,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(end.collided(ship)) {
 			for(int i = 0;i<occupied.length;i++) {
 				if(!occupied[i]) {
-					
+					pointSound = new SimpleAudioPlayer("point sound.wav",false);
+					pointSound.play();
 					docks[i].setDir(1);
 					occupied[i] = true;
 					ships[i].setDir(0);
@@ -182,6 +189,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(hearts.size() == 0) {
 			backgroundMusic.pause();
 			laserSound.pause();
+			gameOver = new SimpleAudioPlayer("loss sound.wav", false);
 			gameOver.play();
 			endScreen.setDir(0);
 			endScreen.paint(g);
@@ -191,6 +199,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(score ==  4) {
 			backgroundMusic.pause();
 			laserSound.pause();
+			winSound = new SimpleAudioPlayer("win sound.wav", false);
 			winSound.play();
 			endScreen.setDir(1);
 			endScreen.paint(g);
@@ -379,7 +388,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			for(int i =0;i<docks.length;i++) {
 				docks[i].setDir(0);
 			}
+			laserSound = new SimpleAudioPlayer("edm-zap-246568 (2) (1).wav",true);
 			laserSound.play();
+			backgroundMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
 			backgroundMusic.play();
 		}
 		if(arg0.getKeyCode() == 61) {
