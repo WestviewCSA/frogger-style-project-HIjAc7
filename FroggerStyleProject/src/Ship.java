@@ -50,7 +50,7 @@ public class Ship{
 			x = 650;
 		}
 		init(x,y);
-		g2.drawRect(x+1, y, width-5, height-5);
+		//g2.drawRect(x+1, y, width-5, height-5);
 		switch(dir) {
 		case 0:
 			g2.drawImage(forward, tx, null);

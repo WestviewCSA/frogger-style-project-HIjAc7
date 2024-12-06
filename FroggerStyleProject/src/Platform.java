@@ -120,7 +120,7 @@ public class Platform{
 		
 		init(x,y);
 		g2.drawImage(forward, tx, null);
-		g2.drawRect(x, y, width, height);
+		//g2.drawRect(x, y, width, height);
 	}
 	
 	private void init(double a, double b) {

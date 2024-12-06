@@ -69,7 +69,7 @@ public class EndGoal{
 		
 		init(x,y);
 		g2.drawImage(forward, tx, null);
-		g2.drawRect(x,y,width,height);
+		//g2.drawRect(x,y,width,height);
 	}
 	public boolean collided(Ship ship) {
 		Rectangle main = new Rectangle(ship.getX()+1,ship.getY(),ship.getHeight()-5,ship.getWidth()-5);

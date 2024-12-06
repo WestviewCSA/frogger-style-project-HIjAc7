@@ -52,7 +52,7 @@ public class Laser{
 		
 		init(x,y);
 		g2.drawImage(forward, tx, null);
-		g2.drawRect(x, y+35, width, 30);
+		//g2.drawRect(x, y+35, width, 30);
 	}
 	
 	private void init(double a, double b) {
