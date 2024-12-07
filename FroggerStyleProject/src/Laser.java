@@ -75,5 +75,31 @@ public class Laser{
 		Rectangle thisObject = new Rectangle(x, y+35, width, 30);
 		return main.intersects(thisObject) ;
 	}
+	public int getY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public int getWidth() {
+		return width;
+	}
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	public int getHeight() {
+		return height;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	public int getX() {
+		return x;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+	
 
 }

@@ -45,7 +45,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	SimpleAudioPlayer winSound = new SimpleAudioPlayer("win sound.wav", false);
 	SimpleAudioPlayer heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 	SimpleAudioPlayer pointSound = new SimpleAudioPlayer("point sound.wav",false);
-	
+	SimpleAudioPlayer introMusic = new SimpleAudioPlayer("game-music-7408.wav",true);
 	
 	//	Music soundBang = new Music("bang.wav", false);
 //	Music soundHaha = new Music("haha.wav", false);
@@ -72,7 +72,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	ArrayList<Hearts> hearts = new ArrayList<Hearts>();
 	Hearts[] lostHearts = new Hearts[6];
 	EndScreen endScreen = new EndScreen(0,0);
-	//frame width/height
+	StartScreen start = new StartScreen(0,0);
+	//frame width/heights
 	int width = 600;
 	int height = 800;	
 	
@@ -81,130 +82,144 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		super.paintComponent(g);
 		g.setColor(Color.green);
 		//painting all assets and tracking collision
-		for(Background obj : space) {
-			obj.paint(g);
-		}
-		end.paint(g);
-		for(DockingBay obj : docks) {
-			obj.paint(g);
-		}
-		
-		for(Hearts obj : lostHearts) {
-			obj.setDir(1);
-			obj.paint(g);
-		}
-		for(Hearts obj : hearts) {
-			obj.setDir(0);
-			obj.paint(g);
-		}
-		
-		for(Asteroid obj : row1) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.reset();
-				hearts.remove(hearts.size()-1);
-				asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
-				asteroidHit.play();
-				heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-				heartLost.play();
+		start.paint(g);
+		introMusic.play();
+		if(start.getDir()==0) {
+			start.paint(g);
+		}else {
+			introMusic.pause();
+			laserSound.play();
+			backgroundMusic.play();
+			for(Background obj : space) {
+				obj.paint(g);
 			}
-		}
-		for(Asteroid obj : row2) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.reset();
-				hearts.remove(hearts.size()-1);
-				asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
-				asteroidHit.play();
-				heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-				heartLost.play();
-			}
-		}
-		asteroid.paint(g);
-		for(Asteroid obj : row3) {
-			obj.paint(g);
-			if(obj.collided(ship)) {
-				ship.reset();
-				hearts.remove(hearts.size()-1);
-				asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
-				asteroidHit.play();
-				heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-				heartLost.play();
-				
+			end.paint(g);
+			for(DockingBay obj : docks) {
+				obj.paint(g);
 			}
 			
-		}
-		for(DockedShip obj : ships) {
-			obj.paint(g);
-		}
-		for(Laser obj : lasers) {
-			obj.paint(g);
-		}
-		for(Platform[] list : platforms) {
-			for(Platform obj : list) {
+			for(Hearts obj : lostHearts) {
+				obj.setDir(1);
+				obj.paint(g);
+			}
+			for(Hearts obj : hearts) {
+				obj.setDir(0);
+				obj.paint(g);
+			}
+			
+			for(Asteroid obj : row1) {
 				obj.paint(g);
 				if(obj.collided(ship)) {
-					ship.setY(obj.getY());
-					ship.setVy(0);
-					ship.setVx(obj.getVx());
-					collided = true;
+					ship.reset();
+					hearts.remove(hearts.size()-1);
+					asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+					asteroidHit.play();
+					heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+					heartLost.play();
 				}
 			}
-		}
-		
-		for(Laser obj : lasers) {
-			if(!collided && obj.collided(ship)) {
-				laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
-				laserHit.play();
-				ship.reset();
-				hearts.remove(hearts.size()-1);
-				heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-				heartLost.play();
+			for(Asteroid obj : row2) {
+				obj.paint(g);
+				if(obj.collided(ship)) {
+					ship.reset();
+					hearts.remove(hearts.size()-1);
+					asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+					asteroidHit.play();
+					heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+					heartLost.play();
+				}
+			}
+			asteroid.paint(g);
+			for(Asteroid obj : row3) {
+				obj.paint(g);
+				if(obj.collided(ship)) {
+					ship.reset();
+					hearts.remove(hearts.size()-1);
+					asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+					asteroidHit.play();
+					heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+					heartLost.play();
+					
+				}
+				
+			}
+			for(DockedShip obj : ships) {
+				obj.paint(g);
+			}
+			for(Laser obj : lasers) {
+				obj.paint(g);
+			}
+			for(Platform[] list : platforms) {
+				for(Platform obj : list) {
+					obj.paint(g);
+					if(obj.collided(ship)) {
+						ship.setY(obj.getY());
+						ship.setVy(0);
+						ship.setVx(obj.getVx());
+						collided = true;
+					}
+				}
 			}
 			
-		}
-		//displaying score
-		Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
-		g.setFont(myFont);
-		g.setColor(Color.white);
-		g.drawString("Score: "+score, 20, 50);
 		
-		ship.paint(g);
-		
-		if(end.collided(ship)) {
-			for(int i = 0;i<occupied.length;i++) {
-				if(!occupied[i]) {
-					pointSound = new SimpleAudioPlayer("point sound.wav",false);
-					pointSound.play();
-					docks[i].setDir(1);
-					occupied[i] = true;
-					ships[i].setDir(0);
-					score++;
-					ship.reset();
-					break;
+			//displaying score
+			Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
+			g.setFont(myFont);
+			g.setColor(Color.white);
+			g.drawString("Score: "+score, 20, 50);
+			
+			ship.paint(g);
+			
+			if(end.collided(ship)) {
+				for(int i = 0;i<occupied.length;i++) {
+					if(!occupied[i]) {
+						pointSound = new SimpleAudioPlayer("point sound.wav",false);
+						pointSound.play();
+						docks[i].setDir(1);
+						occupied[i] = true;
+						ships[i].setDir(0);
+						score++;
+						ship.reset();
+						break;
+					}
 				}
 			}
-		}
-		//ends game based on score or lives
-		if(hearts.size() == 0) {
-			backgroundMusic.pause();
-			laserSound.pause();
-			gameOver = new SimpleAudioPlayer("loss sound.wav", false);
-			gameOver.play();
-			endScreen.setDir(0);
-			endScreen.paint(g);
-			g.drawString("Score: "+score, 100, 500);
+			for(Laser obj : lasers) {
+				if(!collided && obj.collided(ship)) {
+					laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
+					laserHit.play();
+					ship.reset();
+					hearts.remove(hearts.size()-1);
+					heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+					heartLost.play();
+				}
+				
+			}
+			//ends game based on score or lives
+			if(hearts.size() == 0) {
+				backgroundMusic.pause();
+				laserSound.pause();
+				gameOver = new SimpleAudioPlayer("loss sound.wav", false);
+				gameOver.play();
+				endScreen.setDir(0);
+				endScreen.paint(g);
+				g.drawString("Score: "+score, 100, 500);
+
+			}
+			if(score ==  4) {
+				backgroundMusic.pause();
+				laserSound.pause();
+				winSound = new SimpleAudioPlayer("win sound.wav", false);
+				winSound.play();
+				endScreen.setDir(1);
+				endScreen.paint(g);
+			}
+			
+			
 
 		}
-		if(score ==  4) {
-			backgroundMusic.pause();
-			laserSound.pause();
-			winSound = new SimpleAudioPlayer("win sound.wav", false);
-			winSound.play();
-			endScreen.setDir(1);
-			endScreen.paint(g);
-		}
 	}
+
 	
 	
 	
@@ -284,6 +299,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		platforms.add(platform7);
 		for(int i = 0;i<occupied.length;i++) {
 			occupied[i] = false;
+		}
+		for(int i = 0;i<lasers.length;i++) {
+			lasers[i] = new Laser(0,i*40+180);;
 		}
 		ship.setDir(0);
 		
@@ -373,6 +391,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		if(arg0.getKeyCode() == 82) {
 			ship.reset();
+			laserSound.pause();
+			backgroundMusic.pause();
 			score = 0;
 			endScreen.setDir(2);
 			for(int i = hearts.size()-1;i>=0;i--) {
@@ -388,6 +408,10 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			for(int i =0;i<docks.length;i++) {
 				docks[i].setDir(0);
 			}
+			for(int i = 0;i<occupied.length;i++) {
+				occupied[i] = false;
+			}
+			start.setDir(0);
 			laserSound = new SimpleAudioPlayer("edm-zap-246568 (2) (1).wav",true);
 			laserSound.play();
 			backgroundMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
@@ -414,6 +438,12 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(arg0.getKeyCode() == 34) {
 			ship.setVy(4);
 			ship.setVx(4);
+		}
+		if(arg0.getKeyCode() == 69) {
+			start.setDir(1);
+		}
+		if(arg0.getKeyCode() == 72) {
+			start.setDir(1);
 		}
 		
 	}
