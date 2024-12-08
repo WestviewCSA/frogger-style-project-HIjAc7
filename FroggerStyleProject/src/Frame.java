@@ -36,6 +36,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	ArrayList<String> fonts = GFG.getfonts();
 	Font myFont = new Font(fonts.get(f), Font.BOLD, 40);
 	boolean collided = false;
+	int mode = 0;
+	boolean codeEntered = false;
+	boolean[] cheatCode = new boolean[11];
+	
+	
 	//Initializing objects for sound effects
 	SimpleAudioPlayer backgroundMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
 	SimpleAudioPlayer asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
@@ -87,6 +92,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		if(start.getDir()==0) {
 			start.paint(g);
 		}else {
+			if(codeEntered) {
+				System.out.println("Cheat Code Entered");
+			}
 			introMusic.pause();
 			laserSound.play();
 			backgroundMusic.play();
@@ -239,9 +247,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		//playing sound effect
 		backgroundMusic.play();
 		laserSound.play();
+		
 		//Initializing assets and placing them
 		for(int i = 0;i<row1.length;i++) {
 			row1[i] = new Asteroid(i*150,600,1);
+		
 		}
 		for(int i = 0; i<lostHearts.length;i++) {
 			lostHearts[i] = new Hearts(i*40+20,720);
@@ -252,9 +262,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		for(int i = 0;i<row2.length;i++) {
 			row2[i] = new Asteroid(i*120+15,525,2);
+			
 		}
 		for(int i = 0;i<row3.length;i++) {
 			row3[i] = new Asteroid(i*135-100,440,1);
+			
 		}
 		for(int i = 0;i<space.length;i++) {
 			space[i] = new Background(0,i*150);
@@ -302,6 +314,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		for(int i = 0;i<lasers.length;i++) {
 			lasers[i] = new Laser(0,i*40+180);;
+		}
+		for(int i =0;i<cheatCode.length;i++) {
+			cheatCode[i] = false;
 		}
 		ship.setDir(0);
 		
@@ -364,8 +379,18 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		//+ and - to toggle visibility of the ship - hard mode?
 		//more keys for diagonal movement
 		System.out.println(arg0.getKeyCode());
+		System.out.println(cheatCode);
 		if(arg0.getKeyCode() == 38) {
-			;
+			if(cheatCode[0]==false) {
+				cheatCode[0]=true;
+			}else if(cheatCode[1]==false 
+					&& cheatCode[0]) {
+				cheatCode[1] = true;
+			}else {
+				for(int i=0;i<cheatCode.length;i++) {
+					cheatCode[i] = false;
+				}
+			}
 			ship.setVy(-4);
 			ship.setVx(0);
 			if(collided) {
@@ -374,6 +399,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			}
 		}
 		if(arg0.getKeyCode() == 40) {
+			if(cheatCode[2]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1]) {
+				cheatCode[2]=true;
+			}else if(cheatCode[3]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1] 
+					&& cheatCode[2]) {
+				cheatCode[3] = true;
+			}else {
+				for(int i=0;i<cheatCode.length;i++) {
+					cheatCode[i] = false;
+				}
+			}
 			ship.setVy(4);
 			ship.setVx(0);
 			if(collided) {
@@ -382,10 +421,50 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			}
 		}
 		if(arg0.getKeyCode() == 39) {
+			if(cheatCode[5]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1] 
+					&& cheatCode[2] 
+					&& cheatCode[3] 
+					&& cheatCode[4]) {
+				cheatCode[5]=true;
+			}else if(cheatCode[7]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1] 
+					&& cheatCode[2] 
+					&& cheatCode[3] 
+					&& cheatCode[4] 
+					&& cheatCode[5] 
+					&& cheatCode[6]) {
+				cheatCode[7] = true;
+			}else {
+				for(int i=0;i<cheatCode.length;i++) {
+					cheatCode[i] = false;
+				}
+			}
 			ship.setVx(4);
 			ship.setVy(0);
 		}
 		if(arg0.getKeyCode() == 37) {
+			if(cheatCode[4]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1]
+					&& cheatCode[2] 
+					&& cheatCode[3] ) {
+				cheatCode[4]=true;
+			}else if(cheatCode[6]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1] 
+					&& cheatCode[2] 
+					&& cheatCode[3] 
+					&& cheatCode[4] 
+					&& cheatCode[5] ) {
+				cheatCode[6] = true;
+			}else {
+				for(int i=0;i<cheatCode.length;i++) {
+					cheatCode[i] = false;
+				}
+			}
 			ship.setVx(-4);
 			ship.setVy(0);
 		}
@@ -411,6 +490,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			for(int i = 0;i<occupied.length;i++) {
 				occupied[i] = false;
 			}
+			for(int i = 0;i<row2.length;i++) {
+				row2[i] = new Asteroid(i*120+15,525,2);
+				
+			}
+			
 			start.setDir(0);
 			laserSound = new SimpleAudioPlayer("edm-zap-246568 (2) (1).wav",true);
 			laserSound.play();
@@ -440,10 +524,117 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			ship.setVx(4);
 		}
 		if(arg0.getKeyCode() == 69) {
+			mode = 1;
 			start.setDir(1);
+			for(Asteroid obj : row1) {
+				obj.setVx(2);
+			}
+			//int mult=1;
+			for(Asteroid obj : row2) {
+				obj.setVx(2);
+				//obj.setX(obj.getX()+mult*10);
+				//mult++;
+			}
+			for(Asteroid obj : row3) {
+				obj.setVx(2);
+			}
+			asteroid.setVx(2);
+			for(Platform[] list : platforms) {
+				for(Platform obj : list) {
+					obj.setVx(2);
+				}
+			}
 		}
 		if(arg0.getKeyCode() == 72) {
+			mode = 2;
 			start.setDir(1);
+			for(Asteroid obj : row1) {
+				obj.setVx(5);
+			}
+			
+			for(Asteroid obj : row2) {
+				obj.setVx(5);
+				
+			}
+			for(Asteroid obj : row3) {
+				obj.setVx(5);
+			}
+			asteroid.setVx(5);
+			for(Platform[] list : platforms) {
+				for(Platform obj : list) {
+					obj.setVx(5);
+				}
+			}
+		}
+		if(arg0.getKeyCode() == 87) {
+			ship.setVy(-4);
+			ship.setVx(-0);
+		}
+		if(arg0.getKeyCode() == 83) {
+			ship.setVy(4);
+			ship.setVx(0);
+		}
+		if(arg0.getKeyCode() == 65) {
+			if(cheatCode[9]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1]
+					&& cheatCode[2] 
+					&& cheatCode[3] 
+					&& cheatCode[4] 
+					&& cheatCode[5] 
+					&& cheatCode[6]
+					&& cheatCode[7]
+					&& cheatCode[8] ) {
+				cheatCode[9] = true;
+			
+			}else {
+				for(int i=0;i<cheatCode.length;i++) {
+					cheatCode[i] = false;
+				}
+			}
+			ship.setVy(0);
+			ship.setVx(-4);
+		}
+		if(arg0.getKeyCode() == 68) {
+			ship.setVy(0);
+			ship.setVx(4);
+		}
+		if(arg0.getKeyCode() == 66) {
+			if(cheatCode[8]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1]
+					&& cheatCode[2] 
+					&& cheatCode[3] 
+					&& cheatCode[4] 
+					&& cheatCode[5] 
+					&& cheatCode[6]
+					&& cheatCode[7]) {
+				cheatCode[8] = true;
+			}else {
+				for(int i=0;i<cheatCode.length;i++) {
+					cheatCode[i] = false;
+				}
+			}
+		}
+		if(arg0.getKeyCode() == 10) {
+			if(cheatCode[10]==false 
+					&& cheatCode[0] 
+					&& cheatCode[1]
+					&& cheatCode[2] 
+					&& cheatCode[3] 
+					&& cheatCode[4] 
+					&& cheatCode[5] 
+					&& cheatCode[6]
+					&& cheatCode[7]
+					&& cheatCode[8]
+					&& cheatCode[9] ) {
+				cheatCode[10] = true;
+				codeEntered = true;
+			}else {
+				for(int i=0;i<cheatCode.length;i++) {
+					cheatCode[i] = false;
+				}
+			}
 		}
 		
 	}

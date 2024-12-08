@@ -72,10 +72,14 @@ public class Platform{
 	}
 
 	public int getVx() {
+		
 		return vx;
 	}
 
 	public void setVx(int vx) {
+		if(mode == 2) {
+			vx*= -1;
+		}
 		this.vx = vx;
 	}
 
