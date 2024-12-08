@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.net.URL;
@@ -69,6 +70,11 @@ public class Ship{
 		
 		}
 
+	}
+	public boolean collided(ufoBullet bullet) {
+		Rectangle main = new Rectangle(bullet.getX(),bullet.getY(),bullet.getHeight(),bullet.getWidth());
+		Rectangle thisObject = new Rectangle(x+25, y+25, width/2, height/2);
+		return main.intersects(thisObject);
 	}
 	public void reset() {
 		x = 275;

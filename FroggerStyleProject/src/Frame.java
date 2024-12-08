@@ -78,6 +78,17 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	Hearts[] lostHearts = new Hearts[6];
 	EndScreen endScreen = new EndScreen(0,0);
 	StartScreen start = new StartScreen(0,0);
+	
+	//for secret game
+	UFO[] ufo1 = new UFO[5];
+	UFO[] ufo2 = new UFO[5];
+	UFO[] ufo3 = new UFO[5];
+	UFO[] ufo4 = new UFO[5];
+	ufoBullet bullet1 = new ufoBullet();
+	ufoBullet bullet2 = new ufoBullet();
+	ufoBullet bullet3 = new ufoBullet();
+	ArrayList<shipBullet> bullets = new ArrayList<shipBullet>();
+	
 	//frame width/heights
 	int width = 600;
 	int height = 800;	
@@ -93,137 +104,231 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			start.paint(g);
 		}else {
 			if(codeEntered) {
-				System.out.println("Cheat Code Entered");
-			}
-			introMusic.pause();
-			laserSound.play();
-			backgroundMusic.play();
-			for(Background obj : space) {
-				obj.paint(g);
-			}
-			end.paint(g);
-			for(DockingBay obj : docks) {
-				obj.paint(g);
-			}
-			
-			for(Hearts obj : lostHearts) {
-				obj.setDir(1);
-				obj.paint(g);
-			}
-			for(Hearts obj : hearts) {
-				obj.setDir(0);
-				obj.paint(g);
-			}
-			
-			for(Asteroid obj : row1) {
-				obj.paint(g);
-				if(obj.collided(ship)) {
-					ship.reset();
-					hearts.remove(hearts.size()-1);
-					asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
-					asteroidHit.play();
-					heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-					heartLost.play();
-				}
-			}
-			for(Asteroid obj : row2) {
-				obj.paint(g);
-				if(obj.collided(ship)) {
-					ship.reset();
-					hearts.remove(hearts.size()-1);
-					asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
-					asteroidHit.play();
-					heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-					heartLost.play();
-				}
-			}
-			asteroid.paint(g);
-			for(Asteroid obj : row3) {
-				obj.paint(g);
-				if(obj.collided(ship)) {
-					ship.reset();
-					hearts.remove(hearts.size()-1);
-					asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
-					asteroidHit.play();
-					heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-					heartLost.play();
-					
+				introMusic.pause();
+				laserSound.pause();
+				backgroundMusic.play();
+				for(Background obj : space) {
+					obj.paint(g);
 				}
 				
-			}
-			for(DockedShip obj : ships) {
-				obj.paint(g);
-			}
-			for(Laser obj : lasers) {
-				obj.paint(g);
-			}
-			for(Platform[] list : platforms) {
-				for(Platform obj : list) {
+			
+				Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
+				g.setFont(myFont);
+				g.setColor(Color.white);
+				g.drawString("Score: "+score, 20, 50);
+				for(Hearts obj : lostHearts) {
+					obj.setDir(1);
+					obj.paint(g);
+				}
+				for(Hearts obj : hearts) {
+					obj.setDir(0);
+					obj.paint(g);
+				}
+				for(UFO obj : ufo1) {
 					obj.paint(g);
 					if(obj.collided(ship)) {
-						ship.setY(obj.getY());
-						ship.setVy(0);
-						ship.setVx(obj.getVx());
-						collided = true;
-					}
-				}
-			}
-			
-		
-			//displaying score
-			Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
-			g.setFont(myFont);
-			g.setColor(Color.white);
-			g.drawString("Score: "+score, 20, 50);
-			
-			ship.paint(g);
-			
-			if(end.collided(ship)) {
-				for(int i = 0;i<occupied.length;i++) {
-					if(!occupied[i]) {
-						pointSound = new SimpleAudioPlayer("point sound.wav",false);
-						pointSound.play();
-						docks[i].setDir(1);
-						occupied[i] = true;
-						ships[i].setDir(0);
-						score++;
 						ship.reset();
-						break;
+						hearts.remove(hearts.size()-1);
+						asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+						asteroidHit.play();
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
 					}
 				}
-			}
-			for(Laser obj : lasers) {
-				if(!collided && obj.collided(ship)) {
-					laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
-					laserHit.play();
-					ship.reset();
-					hearts.remove(hearts.size()-1);
-					heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
-					heartLost.play();
+				for(UFO obj : ufo2) {
+					obj.paint(g);
+					if(obj.collided(ship)) {
+						ship.reset();
+						hearts.remove(hearts.size()-1);
+						asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+						asteroidHit.play();
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
+					}
+				}
+				for(UFO obj : ufo3) {
+					obj.paint(g);
+					if(obj.collided(ship)) {
+						ship.reset();
+						hearts.remove(hearts.size()-1);
+						asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+						asteroidHit.play();
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
+					}
+				}
+				for(UFO obj : ufo4) {
+					obj.paint(g);
+					if(obj.collided(ship)) {
+						ship.reset();
+						hearts.remove(hearts.size()-1);
+						asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+						asteroidHit.play();
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
+					}
+				}
+				ship.paint(g);
+				bullet1.paint(g);
+				bullet2.paint(g);
+				bullet3.paint(g);
+				if(bullet1.pastBorder()) {
+					bullet1.reset();
+				}
+				if(bullet1.pastBorder()) {
+					bullet2.reset();
+				}
+				if(bullet1.pastBorder()) {
+					bullet3.reset();
+				}
+				if(hearts.size() == 0) {
+					backgroundMusic.pause();
+					laserSound.pause();
+					gameOver = new SimpleAudioPlayer("loss sound.wav", false);
+					gameOver.play();
+					endScreen.setDir(0);
+					endScreen.paint(g);
+					g.drawString("Score: "+score, 100, 500);
+	
+				}
+				if(score ==  4) {
+					backgroundMusic.pause();
+					laserSound.pause();
+					winSound = new SimpleAudioPlayer("win sound.wav", false);
+					winSound.play();
+					endScreen.setDir(1);
+					endScreen.paint(g);
+				}
+			}else {
+				introMusic.pause();
+				laserSound.play();
+				backgroundMusic.play();
+				for(Background obj : space) {
+					obj.paint(g);
+				}
+				end.paint(g);
+				for(DockingBay obj : docks) {
+					obj.paint(g);
 				}
 				
-			}
-			//ends game based on score or lives
-			if(hearts.size() == 0) {
-				backgroundMusic.pause();
-				laserSound.pause();
-				gameOver = new SimpleAudioPlayer("loss sound.wav", false);
-				gameOver.play();
-				endScreen.setDir(0);
-				endScreen.paint(g);
-				g.drawString("Score: "+score, 100, 500);
-
-			}
-			if(score ==  4) {
-				backgroundMusic.pause();
-				laserSound.pause();
-				winSound = new SimpleAudioPlayer("win sound.wav", false);
-				winSound.play();
-				endScreen.setDir(1);
-				endScreen.paint(g);
-			}
+				for(Hearts obj : lostHearts) {
+					obj.setDir(1);
+					obj.paint(g);
+				}
+				for(Hearts obj : hearts) {
+					obj.setDir(0);
+					obj.paint(g);
+				}
+				
+				for(Asteroid obj : row1) {
+					obj.paint(g);
+					if(obj.collided(ship)) {
+						ship.reset();
+						hearts.remove(hearts.size()-1);
+						asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+						asteroidHit.play();
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
+					}
+				}
+				for(Asteroid obj : row2) {
+					obj.paint(g);
+					if(obj.collided(ship)) {
+						ship.reset();
+						hearts.remove(hearts.size()-1);
+						asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+						asteroidHit.play();
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
+					}
+				}
+				asteroid.paint(g);
+				for(Asteroid obj : row3) {
+					obj.paint(g);
+					if(obj.collided(ship)) {
+						ship.reset();
+						hearts.remove(hearts.size()-1);
+						asteroidHit = new SimpleAudioPlayer("asteroid-hitting-something-152511.wav", false);
+						asteroidHit.play();
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
+						
+					}
+					
+				}
+				for(DockedShip obj : ships) {
+					obj.paint(g);
+				}
+				for(Laser obj : lasers) {
+					obj.paint(g);
+				}
+				for(Platform[] list : platforms) {
+					for(Platform obj : list) {
+						obj.paint(g);
+						if(obj.collided(ship)) {
+							ship.setY(obj.getY());
+							ship.setVy(0);
+							ship.setVx(obj.getVx());
+							collided = true;
+						}
+					}
+				}
+				
 			
+				//displaying score
+				Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
+				g.setFont(myFont);
+				g.setColor(Color.white);
+				g.drawString("Score: "+score, 20, 50);
+				
+				ship.paint(g);
+				
+				if(end.collided(ship)) {
+					for(int i = 0;i<occupied.length;i++) {
+						if(!occupied[i]) {
+							pointSound = new SimpleAudioPlayer("point sound.wav",false);
+							pointSound.play();
+							docks[i].setDir(1);
+							occupied[i] = true;
+							ships[i].setDir(0);
+							score++;
+							ship.reset();
+							break;
+						}
+					}
+				}
+				for(Laser obj : lasers) {
+					if(!collided && obj.collided(ship)) {
+						laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
+						laserHit.play();
+						ship.reset();
+						hearts.remove(hearts.size()-1);
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
+					}
+					
+				}
+				//ends game based on score or lives
+				if(hearts.size() == 0) {
+					backgroundMusic.pause();
+					laserSound.pause();
+					gameOver = new SimpleAudioPlayer("loss sound.wav", false);
+					gameOver.play();
+					endScreen.setDir(0);
+					endScreen.paint(g);
+					g.drawString("Score: "+score, 100, 500);
+	
+				}
+				if(score ==  4) {
+					backgroundMusic.pause();
+					laserSound.pause();
+					winSound = new SimpleAudioPlayer("win sound.wav", false);
+					winSound.play();
+					endScreen.setDir(1);
+					endScreen.paint(g);
+				}
 			
+			}
 
 		}
 	}
@@ -249,9 +354,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		laserSound.play();
 		
 		//Initializing assets and placing them
+		for(int i =0;i<ufo1.length;i++) {
+			ufo1[i] = new UFO(i*100+20,200,1);
+		}
+		for(int i =0;i<ufo2.length;i++) {
+			ufo2[i] = new UFO(i*100+20,300,2);
+		}
+		for(int i =0;i<ufo3.length;i++) {
+			ufo3[i] = new UFO(i*100+20,400,1);
+		}
+		for(int i =0;i<ufo4.length;i++) {
+			ufo4[i] = new UFO(i*100+20,500,2);
+		}
 		for(int i = 0;i<row1.length;i++) {
 			row1[i] = new Asteroid(i*150,600,1);
-		
 		}
 		for(int i = 0; i<lostHearts.length;i++) {
 			lostHearts[i] = new Hearts(i*40+20,720);
@@ -320,6 +436,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		}
 		ship.setDir(0);
 		
+		//for secret game
+		
 		//the cursor image must be outside of the src folder
 		//you will need to import a couple of classes to make it fully 
 		//functional! use eclipse quick-fixes
@@ -376,10 +494,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		//arrow keys for movement, r to reset
-		//+ and - to toggle visibility of the ship - hard mode?
+		//+ and - to toggle visibility of the ship - extra hard mode?
 		//more keys for diagonal movement
 		System.out.println(arg0.getKeyCode());
-		System.out.println(cheatCode);
 		if(arg0.getKeyCode() == 38) {
 			if(cheatCode[0]==false) {
 				cheatCode[0]=true;
@@ -636,7 +753,10 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				}
 			}
 		}
-		
+		if(arg0.getKeyCode() == 32) {
+			shipBullet temp = new shipBullet(ship.getX(),ship.getY());
+			bullets.add(temp);
+		}
 	}
 
 	@Override
