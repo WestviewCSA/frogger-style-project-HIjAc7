@@ -82,7 +82,6 @@ public class ufoBullet{
 		}
 		init(x,y);
 		g2.drawImage(forward, tx, null);
-		g2.drawRect(x, y, width, height);
 	}
 	public boolean collided(Ship ship) {
 		Rectangle main = new Rectangle(ship.getX()+1,ship.getY(),ship.getHeight()-5,ship.getWidth()-5);
@@ -104,6 +103,7 @@ public class ufoBullet{
 		}
 		return tempImage;
 	}
+	//getters and setters
 	public void setVx(int vx) {
 	
 		this.vx = vx;
@@ -141,12 +141,14 @@ public class ufoBullet{
 	public int getVx() {
 		return vx;
 	}
+	///returns true when the bullet is past the frame of the window
 	public boolean pastBorder() {
 		if(y>800) {
 			return true;
 		}
 		return  false;
 	}
+	//resets the bullet
 	public void reset() {
 		this.y = 0;
 		this.x = (int)(Math.random() * 500)+20;
