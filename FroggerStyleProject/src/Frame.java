@@ -98,11 +98,15 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		g.setColor(Color.green);
 		//painting all assets and tracking collision
 		start.paint(g);
+		//only displays the start screen
 		if(start.getDir()==0) {
 			introMusic.play();
 			start.paint(g);
+		//continues past the start screen
 		}else {
+			//plays secret game if the code is entered
 			if(codeEntered) {
+				//start music
 				introMusic.pause();
 				laserSound.pause();
 				winSound.play();
@@ -111,6 +115,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				for(Background obj : space) {
 					obj.paint(g);
 				}
+				//creates score tracker on screen
 				Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
 				g.setFont(myFont);
 				g.setColor(Color.white);
@@ -123,6 +128,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 					obj.setDir(0);
 					obj.paint(g);
 				}
+				//goes through ufo objects and checks for collision
 				for(int i = 0;i<ufo1.size();i++) {
 					UFO obj = ufo1.get(i);
 					obj.paint(g);
@@ -216,7 +222,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 					}
 				}
 				ship.paint(g);
-				
+				//checks if the bullets hit anything or are past the border
 				for(ufoBullet obj : ufoBullets) {
 					obj.paint(g);
 					if(obj.pastBorder()) {
@@ -239,6 +245,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 						bullets.remove(i);
 					}
 				}
+				//checks for win or loss
 				if(hearts.size() == 0) {
 					backgroundMusic.pause();
 					laserSound.pause();
@@ -255,10 +262,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 					endScreen.setDir(1);
 					endScreen.paint(g);
 				}
+			//play the normal Frogger game otherwise
 			}else {
+				//starts sounds
 				introMusic.pause();
 				laserSound.play();
 				backgroundMusic.play();
+				//sets scene
 				for(Background obj : space) {
 					obj.paint(g);
 				}
@@ -275,7 +285,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 					obj.setDir(0);
 					obj.paint(g);
 				}
-				
+				//paints asteroid objects
 				for(Asteroid obj : row1) {
 					obj.paint(g);
 					if(obj.collided(ship)) {
@@ -318,6 +328,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				for(Laser obj : lasers) {
 					obj.paint(g);
 				}
+				//ridable objects
 				for(Platform[] list : platforms) {
 					for(Platform obj : list) {
 						obj.paint(g);
@@ -474,12 +485,13 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		for(int i = 0;i<lasers.length;i++) {
 			lasers[i] = new Laser(0,i*40+180);;
 		}
-		for(int i =0;i<cheatCode.length;i++) {
-			cheatCode[i] = false;
-		}
+		
 		ship.setDir(0);
 		
 		//for secret game
+		for(int i =0;i<cheatCode.length;i++) {
+			cheatCode[i] = false;
+		}
 		for(int i =0;i<5;i++) {
 			UFO temp = new UFO(i*100+20,100,1);
 			ufo1.add(temp);
@@ -555,9 +567,12 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		//arrow keys for movement, r to reset
+		//arrow keys for movement - WASD also works, r to reset
 		//+ and - to toggle visibility of the ship - extra hard mode?
 		//more keys for diagonal movement
+		//f to go from secret game to Frogger
+		//secret code to get to the secret game
+		//spacebar to fire bullets in secret game
 		System.out.println(arg0.getKeyCode());
 		if(arg0.getKeyCode() == 38) {
 			if(hearts.size()>0) {
