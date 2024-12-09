@@ -46,7 +46,7 @@ public class UFO{
 		this.y = b;
 		mode = m;
 		if(mode != 1) {
-			vx*=1;
+			vx*=-1;
 		}
 	}
 	public UFO(int a, int b, int m, int f) {
@@ -66,23 +66,25 @@ public class UFO{
 		y+=vy;	
 		if(x>500) {
 			vx*=-1;
+			y+=20;
 		}	
 		if(x<0) {
 			vx*=-1;
+			y+=20;
 		}
-	
+		
 		init(x,y);
 		g2.drawImage(forward, tx, null);
 		//g2.drawRect(x+25, y+25, width/2, height/2);
 	}
 	public boolean collided(Ship ship) {
 		Rectangle main = new Rectangle(ship.getX()+1,ship.getY(),ship.getHeight()-5,ship.getWidth()-5);
-		Rectangle thisObject = new Rectangle(x, y, width, height);
+		Rectangle thisObject = new Rectangle(x, y+25, width-10, height/2);
 		return main.intersects(thisObject);
 	}
 	public boolean collided(shipBullet bullet) {
 		Rectangle main = new Rectangle(bullet.getX(),bullet.getY(),bullet.getHeight(),bullet.getWidth());
-		Rectangle thisObject = new Rectangle(x, y, width, height);
+		Rectangle thisObject = new Rectangle(x, y+25, width-10, height/2);
 		return main.intersects(thisObject);
 	}
 	private void init(double a, double b) {

@@ -44,14 +44,20 @@ public class shipBullet{
 		this();
 		this.x = a;
 		this.y = b;
+		vx = 0;
+		vy = -5;
+		
+		tx = AffineTransform.getTranslateInstance(0, 0);
+		init(x, y);
+		
 	}
 	
 	public void paint(Graphics g) {
 		//these are the 2 lines of code needed draw an image on the screen
 		Graphics2D g2 = (Graphics2D) g;
 		
-		x-=vx;
-		y-=vy;		
+		x+=vx;
+		y+=vy;		
 		
 		init(x,y);
 		g2.drawImage(forward, tx, null);

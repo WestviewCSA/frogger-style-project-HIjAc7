@@ -20,7 +20,7 @@ public class ufoBullet{
 	int phase = 0;
 
 	public ufoBullet() {
-		forward 	= getImage("/imgs/"+"ufo bullet.gif");
+		forward 	= getImage("/imgs/"+"ufo bullet gif.gif");
 		 //load the image for Tree
 		
 
@@ -28,17 +28,26 @@ public class ufoBullet{
 		width = 20;
 		height = 20;
 		
-		x = (int)(Math.random() * 750)+20;
+		x = (int)(Math.random() * 500)+20;
 		y = 0;
 		
-		vx = 5;
-		vy = 0;
+		vx = 0;
+		vy = 5;
 		
 		tx = AffineTransform.getTranslateInstance(0, 0);
 		
 		init(x, y); 				//initialize the location of the image
 									//use your variables
 		
+	}
+	public ufoBullet(int a) {
+		this();
+		this.y = a;
+		x = (int)(Math.random() * 500)+20;
+		vx = 0;
+		vy = 5;
+		tx = AffineTransform.getTranslateInstance(0, 0);
+		init(x, y);
 	}
 	public ufoBullet(int a, int b, int m) {
 		this();
@@ -51,7 +60,7 @@ public class ufoBullet{
 		this.x = a;
 		this.y = b;
 		mode = m;
-		forward 	= getImage("/imgs/"+"ufo bullet.gif");
+		forward 	= getImage("/imgs/"+"ufo bullet gif.gif");
 	}
 
 	public void paint(Graphics g) {
@@ -73,7 +82,7 @@ public class ufoBullet{
 		}
 		init(x,y);
 		g2.drawImage(forward, tx, null);
-		//g2.drawRect(x+25, y+25, width/2, height/2);
+		g2.drawRect(x, y, width, height);
 	}
 	public boolean collided(Ship ship) {
 		Rectangle main = new Rectangle(ship.getX()+1,ship.getY(),ship.getHeight()-5,ship.getWidth()-5);
@@ -140,6 +149,6 @@ public class ufoBullet{
 	}
 	public void reset() {
 		this.y = 0;
-		this.x = (int)(Math.random() * 750)+20;
+		this.x = (int)(Math.random() * 500)+20;
 	}
 }

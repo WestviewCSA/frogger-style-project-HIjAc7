@@ -51,6 +51,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	SimpleAudioPlayer heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 	SimpleAudioPlayer pointSound = new SimpleAudioPlayer("point sound.wav",false);
 	SimpleAudioPlayer introMusic = new SimpleAudioPlayer("game-music-7408.wav",true);
+	SimpleAudioPlayer laserShot = new SimpleAudioPlayer("laser shot.wav",false);
 	
 	//	Music soundBang = new Music("bang.wav", false);
 //	Music soundHaha = new Music("haha.wav", false);
@@ -80,13 +81,11 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 	StartScreen start = new StartScreen(0,0);
 	
 	//for secret game
-	UFO[] ufo1 = new UFO[5];
-	UFO[] ufo2 = new UFO[5];
-	UFO[] ufo3 = new UFO[5];
-	UFO[] ufo4 = new UFO[5];
-	ufoBullet bullet1 = new ufoBullet();
-	ufoBullet bullet2 = new ufoBullet();
-	ufoBullet bullet3 = new ufoBullet();
+	ArrayList<UFO> ufo1 = new ArrayList<UFO>();
+	ArrayList<UFO> ufo2 = new ArrayList<UFO>();
+	ArrayList<UFO> ufo3 = new ArrayList<UFO>();
+	ArrayList<UFO> ufo4 = new ArrayList<UFO>();
+	ufoBullet[] ufoBullets = new ufoBullet[5];
 	ArrayList<shipBullet> bullets = new ArrayList<shipBullet>();
 	
 	//frame width/heights
@@ -99,19 +98,19 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		g.setColor(Color.green);
 		//painting all assets and tracking collision
 		start.paint(g);
-		introMusic.play();
 		if(start.getDir()==0) {
+			introMusic.play();
 			start.paint(g);
 		}else {
 			if(codeEntered) {
 				introMusic.pause();
 				laserSound.pause();
+				winSound.play();
+				winSound.pause();
 				backgroundMusic.play();
 				for(Background obj : space) {
 					obj.paint(g);
 				}
-				
-			
 				Font myFont = new Font(fonts.get(154), Font.BOLD, 40);
 				g.setFont(myFont);
 				g.setColor(Color.white);
@@ -124,7 +123,8 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 					obj.setDir(0);
 					obj.paint(g);
 				}
-				for(UFO obj : ufo1) {
+				for(int i = 0;i<ufo1.size();i++) {
+					UFO obj = ufo1.get(i);
 					obj.paint(g);
 					if(obj.collided(ship)) {
 						ship.reset();
@@ -134,8 +134,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 						heartLost.play();
 					}
+					for(int j= 0;j<bullets.size();j++) {
+						if(obj.collided(bullets.get(j))) {
+							laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
+							laserHit.play();
+							ufo1.remove(i);
+							bullets.remove(j);
+							score++;
+							pointSound = new SimpleAudioPlayer("point sound.wav",false);
+							pointSound.play();
+						}
+					}
 				}
-				for(UFO obj : ufo2) {
+				for(int i = 0;i<ufo2.size();i++) {
+					UFO obj = ufo2.get(i);
 					obj.paint(g);
 					if(obj.collided(ship)) {
 						ship.reset();
@@ -145,8 +157,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 						heartLost.play();
 					}
+					for(int j= 0;j<bullets.size();j++) {
+						if(obj.collided(bullets.get(j))) {
+							laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
+							laserHit.play();
+							ufo2.remove(i);
+							bullets.remove(j);
+							score++;
+							pointSound = new SimpleAudioPlayer("point sound.wav",false);
+							pointSound.play();
+						}
+					}
 				}
-				for(UFO obj : ufo3) {
+				for(int i = 0;i<ufo3.size();i++) {
+					UFO obj = ufo3.get(i);
 					obj.paint(g);
 					if(obj.collided(ship)) {
 						ship.reset();
@@ -156,8 +180,20 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 						heartLost.play();
 					}
+					for(int j= 0;j<bullets.size();j++) {
+						if(obj.collided(bullets.get(j))) {
+							laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
+							laserHit.play();
+							ufo3.remove(i);
+							bullets.remove(j);
+							score++;
+							pointSound = new SimpleAudioPlayer("point sound.wav",false);
+							pointSound.play();
+						}
+					}
 				}
-				for(UFO obj : ufo4) {
+				for(int i = 0;i<ufo4.size();i++) {
+					UFO obj = ufo4.get(i);
 					obj.paint(g);
 					if(obj.collided(ship)) {
 						ship.reset();
@@ -166,35 +202,55 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 						asteroidHit.play();
 						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
 						heartLost.play();
+					}
+					for(int j= 0;j<bullets.size();j++) {
+						if(obj.collided(bullets.get(j))) {
+							laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
+							laserHit.play();
+							ufo4.remove(i);
+							bullets.remove(j);
+							score++;
+							pointSound = new SimpleAudioPlayer("point sound.wav",false);
+							pointSound.play();
+						}
 					}
 				}
 				ship.paint(g);
-				bullet1.paint(g);
-				bullet2.paint(g);
-				bullet3.paint(g);
-				if(bullet1.pastBorder()) {
-					bullet1.reset();
+				
+				for(ufoBullet obj : ufoBullets) {
+					obj.paint(g);
+					if(obj.pastBorder()) {
+						obj.reset();
+					}
+					if(obj.collided(ship)) {
+						laserHit = new SimpleAudioPlayer("laser-zap-90575.wav", false);
+						laserHit.play();
+						ship.reset();
+						obj.reset();
+						hearts.remove(hearts.size()-1);
+						heartLost = new SimpleAudioPlayer("mixkit-8-bit-lose-2031.wav", false);
+						heartLost.play();
+					}
 				}
-				if(bullet1.pastBorder()) {
-					bullet2.reset();
-				}
-				if(bullet1.pastBorder()) {
-					bullet3.reset();
+				for(int i = 0;i<bullets.size();i++) {
+					shipBullet obj = bullets.get(i);
+					obj.paint(g);
+					if(obj.pastBorder()) {
+						bullets.remove(i);
+					}
 				}
 				if(hearts.size() == 0) {
 					backgroundMusic.pause();
 					laserSound.pause();
-					gameOver = new SimpleAudioPlayer("loss sound.wav", false);
 					gameOver.play();
 					endScreen.setDir(0);
 					endScreen.paint(g);
 					g.drawString("Score: "+score, 100, 500);
 	
 				}
-				if(score ==  4) {
+				if(score ==  20) {
 					backgroundMusic.pause();
 					laserSound.pause();
-					winSound = new SimpleAudioPlayer("win sound.wav", false);
 					winSound.play();
 					endScreen.setDir(1);
 					endScreen.paint(g);
@@ -312,7 +368,6 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				if(hearts.size() == 0) {
 					backgroundMusic.pause();
 					laserSound.pause();
-					gameOver = new SimpleAudioPlayer("loss sound.wav", false);
 					gameOver.play();
 					endScreen.setDir(0);
 					endScreen.paint(g);
@@ -322,7 +377,6 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				if(score ==  4) {
 					backgroundMusic.pause();
 					laserSound.pause();
-					winSound = new SimpleAudioPlayer("win sound.wav", false);
 					winSound.play();
 					endScreen.setDir(1);
 					endScreen.paint(g);
@@ -354,18 +408,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		laserSound.play();
 		
 		//Initializing assets and placing them
-		for(int i =0;i<ufo1.length;i++) {
-			ufo1[i] = new UFO(i*100+20,200,1);
-		}
-		for(int i =0;i<ufo2.length;i++) {
-			ufo2[i] = new UFO(i*100+20,300,2);
-		}
-		for(int i =0;i<ufo3.length;i++) {
-			ufo3[i] = new UFO(i*100+20,400,1);
-		}
-		for(int i =0;i<ufo4.length;i++) {
-			ufo4[i] = new UFO(i*100+20,500,2);
-		}
+		
 		for(int i = 0;i<row1.length;i++) {
 			row1[i] = new Asteroid(i*150,600,1);
 		}
@@ -437,6 +480,25 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		ship.setDir(0);
 		
 		//for secret game
+		for(int i =0;i<5;i++) {
+			UFO temp = new UFO(i*100+20,100,1);
+			ufo1.add(temp);
+		}
+		for(int i =0;i<5;i++) {
+			UFO temp = new UFO(i*100+20,200,1);
+			ufo2.add(temp);
+		}
+		for(int i =0;i<5;i++) {
+			UFO temp = new UFO(i*100+20,300,1);
+			ufo3.add(temp);
+		}
+		for(int i =0;i<5;i++) {
+			UFO temp = new UFO(i*100+20,400,1);
+			ufo4.add(temp);
+		}
+		for(int i = 0;i<ufoBullets.length;i++) {
+			ufoBullets[i] = new ufoBullet(i*-50);
+		}
 		
 		//the cursor image must be outside of the src folder
 		//you will need to import a couple of classes to make it fully 
@@ -498,97 +560,107 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 		//more keys for diagonal movement
 		System.out.println(arg0.getKeyCode());
 		if(arg0.getKeyCode() == 38) {
-			if(cheatCode[0]==false) {
-				cheatCode[0]=true;
-			}else if(cheatCode[1]==false 
-					&& cheatCode[0]) {
-				cheatCode[1] = true;
-			}else {
-				for(int i=0;i<cheatCode.length;i++) {
-					cheatCode[i] = false;
+			if(hearts.size()>0) {
+				if(cheatCode[0]==false) {
+					cheatCode[0]=true;
+				}else if(cheatCode[1]==false 
+						&& cheatCode[0]) {
+					cheatCode[1] = true;
+				}else {
+					for(int i=0;i<cheatCode.length;i++) {
+						cheatCode[i] = false;
+					}
 				}
-			}
-			ship.setVy(-4);
-			ship.setVx(0);
-			if(collided) {
-				ship.setY(ship.getY()-50);
-				collided = false;
+				ship.setVy(-4);
+				ship.setVx(0);
+				if(collided) {
+					ship.setY(ship.getY()-50);
+					collided = false;
+				}
 			}
 		}
 		if(arg0.getKeyCode() == 40) {
-			if(cheatCode[2]==false 
-					&& cheatCode[0] 
-					&& cheatCode[1]) {
-				cheatCode[2]=true;
-			}else if(cheatCode[3]==false 
-					&& cheatCode[0] 
-					&& cheatCode[1] 
-					&& cheatCode[2]) {
-				cheatCode[3] = true;
-			}else {
-				for(int i=0;i<cheatCode.length;i++) {
-					cheatCode[i] = false;
+			if(hearts.size()>0) {
+				if(cheatCode[2]==false 
+						&& cheatCode[0] 
+						&& cheatCode[1]) {
+					cheatCode[2]=true;
+				}else if(cheatCode[3]==false 
+						&& cheatCode[0] 
+						&& cheatCode[1] 
+						&& cheatCode[2]) {
+					cheatCode[3] = true;
+				}else {
+					for(int i=0;i<cheatCode.length;i++) {
+						cheatCode[i] = false;
+					}
 				}
-			}
-			ship.setVy(4);
-			ship.setVx(0);
-			if(collided) {
-				ship.setY(ship.getY()+50);
-				collided = false;
+				ship.setVy(4);
+				ship.setVx(0);
+				if(collided) {
+					ship.setY(ship.getY()+50);
+					collided = false;
+				}
 			}
 		}
 		if(arg0.getKeyCode() == 39) {
-			if(cheatCode[5]==false 
-					&& cheatCode[0] 
-					&& cheatCode[1] 
-					&& cheatCode[2] 
-					&& cheatCode[3] 
-					&& cheatCode[4]) {
-				cheatCode[5]=true;
-			}else if(cheatCode[7]==false 
-					&& cheatCode[0] 
-					&& cheatCode[1] 
-					&& cheatCode[2] 
-					&& cheatCode[3] 
-					&& cheatCode[4] 
-					&& cheatCode[5] 
-					&& cheatCode[6]) {
-				cheatCode[7] = true;
-			}else {
-				for(int i=0;i<cheatCode.length;i++) {
-					cheatCode[i] = false;
+			if(hearts.size()>0) {
+				if(cheatCode[5]==false 
+						&& cheatCode[0] 
+						&& cheatCode[1] 
+						&& cheatCode[2] 
+						&& cheatCode[3] 
+						&& cheatCode[4]) {
+					cheatCode[5]=true;
+				}else if(cheatCode[7]==false 
+						&& cheatCode[0] 
+						&& cheatCode[1] 
+						&& cheatCode[2] 
+						&& cheatCode[3] 
+						&& cheatCode[4] 
+						&& cheatCode[5] 
+						&& cheatCode[6]) {
+					cheatCode[7] = true;
+				}else {
+					for(int i=0;i<cheatCode.length;i++) {
+						cheatCode[i] = false;
+					}
 				}
+				ship.setVx(4);
+				ship.setVy(0);
 			}
-			ship.setVx(4);
-			ship.setVy(0);
 		}
 		if(arg0.getKeyCode() == 37) {
-			if(cheatCode[4]==false 
-					&& cheatCode[0] 
-					&& cheatCode[1]
-					&& cheatCode[2] 
-					&& cheatCode[3] ) {
-				cheatCode[4]=true;
-			}else if(cheatCode[6]==false 
-					&& cheatCode[0] 
-					&& cheatCode[1] 
-					&& cheatCode[2] 
-					&& cheatCode[3] 
-					&& cheatCode[4] 
-					&& cheatCode[5] ) {
-				cheatCode[6] = true;
-			}else {
-				for(int i=0;i<cheatCode.length;i++) {
-					cheatCode[i] = false;
+			if(hearts.size()>0) {
+				if(cheatCode[4]==false 
+						&& cheatCode[0] 
+						&& cheatCode[1]
+						&& cheatCode[2] 
+						&& cheatCode[3] ) {
+					cheatCode[4]=true;
+				}else if(cheatCode[6]==false 
+						&& cheatCode[0] 
+						&& cheatCode[1] 
+						&& cheatCode[2] 
+						&& cheatCode[3] 
+						&& cheatCode[4] 
+						&& cheatCode[5] ) {
+					cheatCode[6] = true;
+				}else {
+					for(int i=0;i<cheatCode.length;i++) {
+						cheatCode[i] = false;
+					}
 				}
+				ship.setVx(-4);
+				ship.setVy(0);
 			}
-			ship.setVx(-4);
-			ship.setVy(0);
 		}
 		if(arg0.getKeyCode() == 82) {
 			ship.reset();
 			laserSound.pause();
 			backgroundMusic.pause();
+			//winSound.pause();
+		//	gameOver.pause();
 			score = 0;
 			endScreen.setDir(2);
 			for(int i = hearts.size()-1;i>=0;i--) {
@@ -611,8 +683,45 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 				row2[i] = new Asteroid(i*120+15,525,2);
 				
 			}
+			//for secret game
+			for(int i = bullets.size()-1;i>=0;i--) {
+				bullets.remove(i);
+			}
+			for(int i = ufo1.size()-1;i>=0;i--) {
+				ufo1.remove(i);
+			}
+			for(int i =0;i<5;i++) {
+				UFO temp = new UFO(i*100+20,100,1);
+				ufo1.add(temp);
+			}
+			for(int i = ufo2.size()-1;i>=0;i--) {
+				ufo2.remove(i);
+			}
+			for(int i =0;i<5;i++) {
+				UFO temp = new UFO(i*100+20,200,1);
+				ufo2.add(temp);
+			}
+			for(int i = ufo3.size()-1;i>=0;i--) {
+				ufo3.remove(i);
+			}
+			for(int i =0;i<5;i++) {
+				UFO temp = new UFO(i*100+20,300,1);
+				ufo3.add(temp);
+			}
+			for(int i = ufo4.size()-1;i>=0;i--) {
+				ufo4.remove(i);
+			}
+			for(int i =0;i<5;i++) {
+				UFO temp = new UFO(i*100+20,400,1);
+				ufo4.add(temp);
+			}
+			for(int i = 0;i<ufoBullets.length;i++) {
+				ufoBullets[i] = new ufoBullet(i*-50);
+			}
 			
 			start.setDir(0);
+			winSound = new SimpleAudioPlayer("win sound.wav", false);
+			gameOver = new SimpleAudioPlayer("loss sound.wav",false);
 			laserSound = new SimpleAudioPlayer("edm-zap-246568 (2) (1).wav",true);
 			laserSound.play();
 			backgroundMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
@@ -625,20 +734,28 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			ship.setDir(1);
 		}
 		if(arg0.getKeyCode() == 36) {
-			ship.setVy(-4);
-			ship.setVx(-4);
+			if(hearts.size()>0) {	
+				ship.setVy(-4);
+				ship.setVx(-4);
+			}
 		}
 		if(arg0.getKeyCode() == 33) {
-			ship.setVy(-4);
-			ship.setVx(4);
+			if(hearts.size()>0) {
+				ship.setVy(-4);
+				ship.setVx(4);
+			}
 		}
 		if(arg0.getKeyCode() == 35) {
-			ship.setVy(4);
-			ship.setVx(-4);
+			if(hearts.size()>0) {
+				ship.setVy(4);
+				ship.setVx(-4);
+			}
 		}
 		if(arg0.getKeyCode() == 34) {
-			ship.setVy(4);
-			ship.setVx(4);
+			if(hearts.size()>0) {
+				ship.setVy(4);
+				ship.setVx(4);
+			}
 		}
 		if(arg0.getKeyCode() == 69) {
 			mode = 1;
@@ -646,11 +763,9 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			for(Asteroid obj : row1) {
 				obj.setVx(2);
 			}
-			//int mult=1;
 			for(Asteroid obj : row2) {
 				obj.setVx(2);
-				//obj.setX(obj.getX()+mult*10);
-				//mult++;
+				
 			}
 			for(Asteroid obj : row3) {
 				obj.setVx(2);
@@ -684,37 +799,45 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			}
 		}
 		if(arg0.getKeyCode() == 87) {
-			ship.setVy(-4);
-			ship.setVx(-0);
+			if(hearts.size()>0) {
+				ship.setVy(-4);
+				ship.setVx(-0);
+			}
 		}
 		if(arg0.getKeyCode() == 83) {
-			ship.setVy(4);
-			ship.setVx(0);
+			if(hearts.size()>0) {
+				ship.setVy(4);
+				ship.setVx(0);
+			}
 		}
 		if(arg0.getKeyCode() == 65) {
-			if(cheatCode[9]==false 
-					&& cheatCode[0] 
-					&& cheatCode[1]
-					&& cheatCode[2] 
-					&& cheatCode[3] 
-					&& cheatCode[4] 
-					&& cheatCode[5] 
-					&& cheatCode[6]
-					&& cheatCode[7]
-					&& cheatCode[8] ) {
-				cheatCode[9] = true;
-			
-			}else {
-				for(int i=0;i<cheatCode.length;i++) {
-					cheatCode[i] = false;
+			if(hearts.size()>0) {
+				if(cheatCode[9]==false 
+						&& cheatCode[0] 
+						&& cheatCode[1]
+						&& cheatCode[2] 
+						&& cheatCode[3] 
+						&& cheatCode[4] 
+						&& cheatCode[5] 
+						&& cheatCode[6]
+						&& cheatCode[7]
+						&& cheatCode[8] ) {
+					cheatCode[9] = true;
+				
+				}else {
+					for(int i=0;i<cheatCode.length;i++) {
+						cheatCode[i] = false;
+					}
 				}
+				ship.setVy(0);
+				ship.setVx(-4);
 			}
-			ship.setVy(0);
-			ship.setVx(-4);
 		}
 		if(arg0.getKeyCode() == 68) {
-			ship.setVy(0);
-			ship.setVx(4);
+			if(hearts.size()>0) {
+				ship.setVy(0);
+				ship.setVx(4);
+			}
 		}
 		if(arg0.getKeyCode() == 66) {
 			if(cheatCode[8]==false 
@@ -732,6 +855,7 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 					cheatCode[i] = false;
 				}
 			}
+			
 		}
 		if(arg0.getKeyCode() == 10) {
 			if(cheatCode[10]==false 
@@ -747,6 +871,16 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 					&& cheatCode[9] ) {
 				cheatCode[10] = true;
 				codeEntered = true;
+				ship.reset();
+				
+				for(int i = hearts.size()-1;i>=0;i--) {
+					hearts.remove(i);
+				}
+				for(int i = 0; i<6;i++) {
+					Hearts temp = new  Hearts(i*40+20,720);
+					hearts.add(i, temp);
+				}
+				score = 0;
 			}else {
 				for(int i=0;i<cheatCode.length;i++) {
 					cheatCode[i] = false;
@@ -754,8 +888,24 @@ public class Frame extends JPanel implements ActionListener, MouseListener, KeyL
 			}
 		}
 		if(arg0.getKeyCode() == 32) {
-			shipBullet temp = new shipBullet(ship.getX(),ship.getY());
-			bullets.add(temp);
+			if(hearts.size()>0) {
+				if(hearts.size()>0) {
+					shipBullet temp = new shipBullet(ship.getX(),ship.getY());
+					bullets.add(temp);
+					laserShot = new SimpleAudioPlayer("laser shot.wav",false);
+					laserShot.play();  
+				}
+			}
+		}
+		if(arg0.getKeyCode() == 70) {
+			codeEntered = false;
+			laserSound.pause();
+			laserSound = new SimpleAudioPlayer("edm-zap-246568 (2) (1).wav",true);
+			laserSound.play();
+			backgroundMusic.pause();
+			backgroundMusic = new SimpleAudioPlayer("spaceship-cruising-ufo-7176.wav", true);
+			backgroundMusic.play();
+			
 		}
 	}
 
